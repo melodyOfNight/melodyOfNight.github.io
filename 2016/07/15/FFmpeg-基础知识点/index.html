@@ -1,0 +1,840 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="FFmpeg 库简介FFmpeg 一共包含 8 个库：  avcodec        编解码（最重要的库） avformat        封装格式处理 avfilter        滤镜特效处理 avdevice        各种设备的输入输出 avutil        工具库 postproc        后加工 swresample    音频采样数据格式转换 swscale">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFmpeg 基础知识点">
+<meta property="og:url" content="http://yoursite.com/2016/07/15/FFmpeg-基础知识点/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="FFmpeg 库简介FFmpeg 一共包含 8 个库：  avcodec        编解码（最重要的库） avformat        封装格式处理 avfilter        滤镜特效处理 avdevice        各种设备的输入输出 avutil        工具库 postproc        后加工 swresample    音频采样数据格式转换 swscale">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/FFmpeg视频解码流程.png">
+<meta property="og:image" content="http://yoursite.com/images/FFmpeg解码的数据结构.png">
+<meta property="og:image" content="http://yoursite.com/images/sws_scale函数处理过程.png">
+<meta property="og:updated_time" content="2017-07-13T08:54:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FFmpeg 基础知识点">
+<meta name="twitter:description" content="FFmpeg 库简介FFmpeg 一共包含 8 个库：  avcodec        编解码（最重要的库） avformat        封装格式处理 avfilter        滤镜特效处理 avdevice        各种设备的输入输出 avutil        工具库 postproc        后加工 swresample    音频采样数据格式转换 swscale">
+<meta name="twitter:image" content="http://yoursite.com/images/FFmpeg视频解码流程.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/15/FFmpeg-基础知识点/"/>
+
+
+
+
+
+  <title>FFmpeg 基础知识点 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/15/FFmpeg-基础知识点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FFmpeg 基础知识点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-15T23:13:46+08:00">
+                2016-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ffmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">ffmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="FFmpeg-库简介"><a href="#FFmpeg-库简介" class="headerlink" title="FFmpeg 库简介"></a>FFmpeg 库简介</h1><p>FFmpeg 一共包含 8 个库：</p>
+<ul>
+<li>avcodec        编解码（最重要的库）</li>
+<li>avformat        封装格式处理</li>
+<li>avfilter        滤镜特效处理</li>
+<li>avdevice        各种设备的输入输出</li>
+<li>avutil        工具库</li>
+<li>postproc        后加工</li>
+<li>swresample    音频采样数据格式转换</li>
+<li>swscale        视频像素数据格式转换</li>
+</ul>
+<a id="more"></a>
+<h1 id="FFmpeg-视频解码流程"><a href="#FFmpeg-视频解码流程" class="headerlink" title="FFmpeg 视频解码流程"></a>FFmpeg 视频解码流程</h1><p><img src="../../../../images/FFmpeg视频解码流程.png" alt=""></p>
+<p>更详细的可以参照<a href="http://blog.csdn.net/leixiaohua1020/article/details/44220151" target="_blank" rel="noopener">这里</a></p>
+<p>解释：</p>
+<ul>
+<li>av_register_all()                注册所有组件</li>
+<li>avformat_open_input()            打开输入视频文件</li>
+<li>avformat_find_stream_info()    获取视频文件信息</li>
+<li>avcodec_find_decoder()        查找解码器</li>
+<li>avcodec_open2()                打开解码器</li>
+<li>av_read_frame()                从输入文件读取一帧<strong>压缩数据</strong>，例如这里的 H.264</li>
+<li>avcodec_decode_video2()        解码一帧压缩数据</li>
+<li>avcodec_close()                关闭解码器</li>
+<li>avformat_close_input()        关闭输入视频文件</li>
+</ul>
+<h1 id="FFmpeg-解码的数据结构"><a href="#FFmpeg-解码的数据结构" class="headerlink" title="FFmpeg 解码的数据结构"></a>FFmpeg 解码的数据结构</h1><p><img src="../../../../images/FFmpeg解码的数据结构.png" alt=""></p>
+<p>FFMPEG中的结构体很多，最关键的结构体可以分为以下几类：</p>
+<p>a）解协议（http、rtsp、rtmp、mms）</p>
+<p>AVIOContext、URLContext、URLProtocol主要存储音视频使用的协议类型以及状态。URLProtocol存储输入音视频使用的封装格式。每种协议都对应一个URLProtocol结构。</p>
+<p>b）解封装（flv、avi、rmvb、mp4）</p>
+<p>AVFormatContext主要存储音视频封装格式中包含的信息；AVInputFormat存储输入音视频使用的封装格式，每种格式对应一个AVInputFormat结构。</p>
+<p>c）解码（h264、mpeg2、aac、mp3）</p>
+<p>每个AVStream存储一个音频/视频流的相关数据；每个AVStream对应一个AVCodecContext，存储该音频/视频流使用解码方式的相关数据；每个AVCodecContext中对应一个AVCodec，包含该音频/视频对应的解码器。每种解码器对应一个AVCodec结构。</p>
+<p>d）存数据</p>
+<p>就音频而言，每个结构可能有好几帧；视频的话，每个结构一般是一帧。</p>
+<p>AV - 指的是 Audio and Video</p>
+<p><strong>AVFormatContext</strong></p>
+<p>AVFormatContext 封装格式的上下文结构体，也是统领全局的结构体，包含了视频封装格式最外层的信息。</p>
+<ul>
+<li>iformat:        输入视频的 AVInputFormat</li>
+<li>nb_stream:    输入视频的 AVStream 个数</li>
+<li>streams:        输入视频的 AVStream[] 数组</li>
+<li>duration:        输入视频的时长（以微妙为单位）</li>
+<li>bit_rate:        输入视频的码率（码率越高视频越清晰）</li>
+<li>…..</li>
+</ul>
+<p><strong>AVInputFormat</strong></p>
+<p>AVInputFormat 指明了输入文件的封装格式，比如 flv、mkv、mp4、avi等；每种封装格式对应一个该结构体。</p>
+<ul>
+<li>name:            封装格式名称</li>
+<li>long_name:    封装格式的长名称</li>
+<li>extensions:    封装格式的拓展名</li>
+<li>id:            封装格式 ID</li>
+<li>…..</li>
+</ul>
+<p><strong>AVStream</strong></p>
+<p>一般 AVStream[0] 代表的是视频流；AVStream[1] 代表的是音频流。</p>
+<p>视频文件中每个视频（音频）流对应一个该结构体。</p>
+<ul>
+<li>id:            序号</li>
+<li><strong>codec</strong>:        该流对于的 AVCodecCoontext</li>
+<li>time_base:    该流的时基</li>
+<li>r_frame_rate:    该流的帧率</li>
+<li>…..</li>
+</ul>
+<p><strong>AVCodecContext</strong></p>
+<p>编码器上下文结构体，保存了视频（音频）编解码相关信息。</p>
+<ul>
+<li><strong>codec</strong>:        编码器的 AVCodec</li>
+<li>width，height:    图像的宽高（只针对视频）</li>
+<li>pix_fmt:            像素格式（只针对视频）</li>
+<li>sample_rate:        采样率（只针对音频）</li>
+<li>channels:            声道数（只针对音频）</li>
+<li>sample_fmt:        采样格式（只针对音频）</li>
+<li>…..</li>
+</ul>
+<p><strong>AVCodec</strong></p>
+<p>每种视频（音频）编解码器（例如 H.264 解码器）对应一个该结构体。</p>
+<ul>
+<li>name:                编解码器名称</li>
+<li>long_name:        编解码器长名称</li>
+<li>type:                编解码器类型</li>
+<li>id:                编解码器 ID</li>
+<li>….</li>
+</ul>
+<p><strong>AVPacket</strong></p>
+<p>存储一帧压缩编码数据。</p>
+<ul>
+<li>pts:                显示时间戳</li>
+<li>dts:                解码时间戳</li>
+<li><strong>data</strong>:            压缩编码数据</li>
+<li>size:                压缩编码数据大小</li>
+<li>stream_index:        所属的 AVStream，可以用于区分到底是视频流还是音频流</li>
+</ul>
+<p><strong>AVFrame</strong></p>
+<p>存储一帧解码后像素（采样）数据。</p>
+<ul>
+<li><strong>data</strong>:            解码后的图像数据数据（音频采样数据）</li>
+<li>linesize:            对视频来说是图像中一行像素的大小；对音频来说是整个音频帧的大小</li>
+<li>width，height:    图像的宽高（只针对视频）</li>
+<li>key_frame:        是否为关键帧（只针对视频）</li>
+<li>pict_type:        帧类型（只针对视频），例如：I 帧、P 帧、B 帧</li>
+</ul>
+<h1 id="补充小知识点"><a href="#补充小知识点" class="headerlink" title="补充小知识点"></a>补充小知识点</h1><p>1.解码后的数据为什么要经过 sws_scale() 函数处理？</p>
+<ul>
+<li>解码后 YUV 格式的视频像素数据保存在 AVFrame 的 data[0]、data[1]、data[2] 中（data[0]保存的是 Y 帧数据，data[1]保存的是 U 帧数据，data[2]保存的是 V 数据。）。但是这些像素值并不是连续存储的。每行有效像素之后存储了一些无效像素。以亮度 Y 数据为例 data[0] 中包含了 linesize[0] * height 个数据。但是出于优化等方面的考虑，linesize[0] 实际上并不等于宽度 width，而是一个比宽度大一些的值。因此需要使用 sws_scale() 进行转换。转换后去除了无效数据，width 和 linesize[0] 取值相等。</li>
+</ul>
+<p><img src="../../../../images/sws_scale函数处理过程.png" alt=""></p>
+<p>2.上面讲到了码率和帧率，那么码率和帧率到底有什么区别呢？</p>
+<blockquote>
+<p>码率就是数据传输时单位时间传送的数据位数,一般我们用的单位是kbps即千位每秒。通俗一点的理解就是取样率，单位时间内取样率越大，精度就越高，处理出来的文件就越接近原始文件，但是文件体积与取样率是成正比的，所以几乎所有的编码格式重视的都是如何用最低的码率达到最少的失真，围绕这个核心衍生出来的cbr（固定码率）与vbr（可变码率），都是在这方面做的文章，不过事情总不是绝对的，从音频方面来说，码率越高，被压缩的比例越小，音质损失越小，与音源的音质越接近。“码率”就是失真度，码率越高越清晰，反之则画面粗糙而多马赛克。计算机中的信息都是二进制的0和1来表示，其中每一个0或1被称作一个位，用小写b表示，即bit（位）；大写B表示byte,即字节，一个字节＝八个位，即1B＝8b；前面的大写K表示千的意思，即千个位（Kb)或千个字节(KB)。表示文件的大小单位，一般都使用字节（KB）来表示文件的大小。<br>Kbps：首先要了解的是，ps指的是/s，即每秒。Kbps指的是网络速度，也就是每秒钟传送多少个千位的信息（K表示千位，Kb表示的是多少千个位），为了在直观上显得网络的传输速度较快，一般公司都使用kb（千位）来表示，如果是KBps，则表示每秒传送多少千字节。1KBps＝8Kbps。ADSL上网时的网速是512Kbps,如果转换成字节，就是512/8＝64KBps(即64千字节每秒）。</p>
+</blockquote>
+<blockquote>
+<p>帧数简单地说，帧数就是在1秒钟时间里传输的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，通常用fps（Frames Per Second）表示。每一帧都是静止的图象，快速连续地显示帧便形成了运动的假象。高的帧率可以得到更流畅、更逼真的动画。每秒钟帧数 (fps) 愈多，所显示的动作就会愈流畅。一般来说30fps是可以接受的，所以要避免动作不流畅的最低fps是30。除了30fps外，有些计算机视频格式，例如AVI，每秒只能提供15帧。我们之所以能够利用摄像头来看到连续不断的影像，是因为影像传感器不断摄取画面并传输到屏幕上来，当传输速度达到一定的水平时，人眼就无法辨别画面之间的时间间隙，所以大家可以看到连续动态的画面。<br>每秒的帧数（fps）或者说帧率表示图形处理器场景时每秒钟能够更新几次。高的帧率可以得到更流畅、更逼真的动画。一般来说30fps就是可以接受的，但是将性能提升至60fps则可以明显提升交互感和逼真感，但是一般来说超过75fps一般就不容易察觉到有明显的流畅度提升了。如果帧率超过屏幕刷新率只会浪费图形处理的能力，因为显示器不能以这么快的速度更新，这样超过刷新率的帧率就浪费掉了。<br>一般用“FPS(frame per second，每秒钟画面更新的数量)”来表示该项指标。在欣赏电视、电影画面时，只要画面的刷新率达到24帧/秒，就能满足人们的需要。同样的，在玩普通的游戏时，如果刷新率达到24帧/秒即可，但在一些高速游戏中(例如射击游戏)，如果画面的刷新率还是只有24帧/秒，那么就会感觉到画面比较迟钝，不够流畅。 　　虽然理论上画面的刷新率越快越好，但过高的刷新率并没有实际意义——当画面的FPS达到60帧/秒时，已经能满足绝大部分应用需求。一般情况下，如果能够保证游戏画面的平均FPS能够达到30帧/秒，那么画面已经基本流畅；能够达到50帧/秒，就基本可以体会到行云流水的感觉了。一般人很难分辨出60帧/秒与100帧/秒有什么不同。</p>
+</blockquote>
+<p>参考链接：</p>
+<p><a href="http://ffmpeg.org/" target="_blank" rel="noopener">FFmpeg 官网</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/14/音频的基础知识点/" rel="next" title="音频的基础知识点">
+                <i class="fa fa-chevron-left"></i> 音频的基础知识点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/06/用搬瓦工搭建vpn/" rel="prev" title="用搬瓦工搭建vpn">
+                用搬瓦工搭建vpn <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FFmpeg-库简介"><span class="nav-number">1.</span> <span class="nav-text">FFmpeg 库简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FFmpeg-视频解码流程"><span class="nav-number">2.</span> <span class="nav-text">FFmpeg 视频解码流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FFmpeg-解码的数据结构"><span class="nav-number">3.</span> <span class="nav-text">FFmpeg 解码的数据结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#补充小知识点"><span class="nav-number">4.</span> <span class="nav-text">补充小知识点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

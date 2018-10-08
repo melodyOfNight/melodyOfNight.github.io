@@ -1,0 +1,709 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="困扰了几天的问题终于得到解决了，感谢 github，感谢开源~ 在这里记录下遇到的问题，算是记录也避免他人少走一些弯路。 首先记录下插入数据的流程吧：  更新数据源 调用 insertRowsAtIndexPaths: withRowAnimation方法进行插入 设置 tableView 的 setContentOffset   然后再细说一下遇到的问题吧。  更新数据源之后进行插入崩溃  崩溃">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 插入数据到 TableView 顶部">
+<meta property="og:url" content="http://yoursite.com/2018/08/26/iOS-插入数据到-TableView-顶部/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="困扰了几天的问题终于得到解决了，感谢 github，感谢开源~ 在这里记录下遇到的问题，算是记录也避免他人少走一些弯路。 首先记录下插入数据的流程吧：  更新数据源 调用 insertRowsAtIndexPaths: withRowAnimation方法进行插入 设置 tableView 的 setContentOffset   然后再细说一下遇到的问题吧。  更新数据源之后进行插入崩溃  崩溃">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-26T05:40:55.467Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 插入数据到 TableView 顶部">
+<meta name="twitter:description" content="困扰了几天的问题终于得到解决了，感谢 github，感谢开源~ 在这里记录下遇到的问题，算是记录也避免他人少走一些弯路。 首先记录下插入数据的流程吧：  更新数据源 调用 insertRowsAtIndexPaths: withRowAnimation方法进行插入 设置 tableView 的 setContentOffset   然后再细说一下遇到的问题吧。  更新数据源之后进行插入崩溃  崩溃">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/26/iOS-插入数据到-TableView-顶部/"/>
+
+
+
+
+
+  <title>iOS 插入数据到 TableView 顶部 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/26/iOS-插入数据到-TableView-顶部/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 插入数据到 TableView 顶部</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-26T12:46:18+08:00">
+                2018-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>困扰了几天的问题终于得到解决了，感谢 github，感谢开源~</p>
+<p>在这里记录下遇到的问题，算是记录也避免他人少走一些弯路。</p>
+<p>首先记录下插入数据的流程吧：</p>
+<ol>
+<li>更新数据源</li>
+<li>调用 <code>insertRowsAtIndexPaths: withRowAnimation</code>方法进行插入</li>
+<li>设置 tableView 的 <code>setContentOffset</code> </li>
+</ol>
+<p>然后再细说一下遇到的问题吧。</p>
+<ul>
+<li>更新数据源之后进行插入崩溃</li>
+</ul>
+<p>崩溃的很莫名其妙，后来查找是插入的<code>indexPaths</code> 的个数和数据源的个数不一致导致的(忘记了一个额外的时间 cell )。这里有一点需要注意的是，插入之后的 DataSource 个数必须等于插入前的加上待插入的个数之和。</p>
+<p>另外，为了避免在插入的过程中有其他的线程也来进行插入。一般都会用 <code>beginUpdates</code> 和 <code>endUpdates</code> 包起来，保证插入完成之后再插其他的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">[self.viewModel.listData addObject:model_time];</span><br><span class="line"> NSIndexPath *indexpath = [NSIndexPath indexPathForRow:MAX(0, self.viewModel.listData.count -1) inSection:0];</span><br><span class="line">[self.tableView insertRowAtIndexPath:indexpath withRowAnimation:UITableViewRowAnimationNone];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br></pre></td></tr></table></figure>
+<p>上面的代码片段，除了 <code>beginUpdates</code> 和 <code>endUpdates</code>之外还有一个<code>setAnimationsEnabled</code> 这个，这个又是刚什么用的呢？这是接下来我要讲的第二个问题。</p>
+<ul>
+<li>插入数据之后刷新 <code>tableView</code> 有上个<code>cell</code> 的残影。</li>
+</ul>
+<p>尽管你已经把插入动画设置为 <code>UITableViewRowAnimationNone</code> 了还是会有。Stack Overflow 查找了一下，发现在插入的时候把<code>UIView</code>的动画去掉就可以了。</p>
+<ul>
+<li>插入多条数据<code>tableView</code>会滚动到顶部。</li>
+</ul>
+<p>对于滚动到顶部这个问题，查找了好多回答，清一色的都是设置 <code>setContentOffset</code> ，问题是尽管我设置了正确的 <code>setContentOffset</code> 还是有问题。一直被这个问题困扰了几天，后来干脆去<code>github</code>上翻看<code>IM</code>相关项目的源码，发现了插入数据的时候有些不同。</p>
+<p>原本我是这样插入数据的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">[self.viewModel.listData insertObjects:models atIndex:0];</span><br><span class="line">NSMutableArray&lt;NSIndexPath*&gt;* indexPaths = [[NSMutableArray alloc] initWithCapacity:models.count];</span><br><span class="line">for (int i = 0; i &lt; models.count; i++) &#123;</span><br><span class="line">       NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];</span><br><span class="line">       [indexPaths addObject:indexPath];</span><br><span class="line">&#125;</span><br><span class="line">[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br></pre></td></tr></table></figure>
+<p>改成这样就可以了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">NSMutableArray&lt;NSIndexPath*&gt;* indexPaths = [[NSMutableArray alloc] initWithCapacity:models.count];</span><br><span class="line">NSMutableIndexSet *indexSets = [[NSMutableIndexSet alloc] init];</span><br><span class="line">[models enumerateObjectsUsingBlock:^(RSChatTaskModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];</span><br><span class="line">[indexPaths addObject:indexPath];</span><br><span class="line">[indexSets addIndex:idx];</span><br><span class="line">    &#125;];</span><br><span class="line">[self.viewModel.listData insertObjects:models atIndexes:indexSets];</span><br><span class="line">[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>计算<code>setContentOffset</code>的方式</li>
+</ul>
+<p>有<code>2</code>种方式：<br>1、在<code>scrollViewDidScroll</code>的时候，在插入之前拿到插入前的<code>tableView</code>的<code>contentOffset</code> ，插入之后(<code>endUpdates</code>的时候会去重新计算<code>tableView:estimatedHeightForRowAtIndexPath</code>)再去拿<code>contentOffset</code>，两者相加即是插入<code>cell</code>的高度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">插入cells的高度 =  afterContentSize.height - beforeContentSize.height</span><br></pre></td></tr></table></figure>
+<ul>
+<li>另一个就是加载下一页的时机和防止重复加载的问题，这里我设置为还剩下<code>5</code>条数据的时候开始加载下一页，并且是往下拉加载更多的时候才会去加载。</li>
+</ul>
+<p>插入<code>cells</code>到<code>tableview</code>顶部完整代码片段为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;loadMore: 加载下一页数据...&quot;);</span><br><span class="line">CGSize beforeContentSize = self.tableView.contentSize;</span><br><span class="line">CGPoint beforeContentOffset = self.tableView.contentOffset;</span><br><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">NSMutableArray&lt;NSIndexPath*&gt;* indexPaths = [[NSMutableArray alloc] initWithCapacity:models.count];</span><br><span class="line">NSMutableIndexSet *indexSets = [[NSMutableIndexSet alloc] init];</span><br><span class="line">[models enumerateObjectsUsingBlock:^(RSChatTaskModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];</span><br><span class="line">    [indexPaths addObject:indexPath];</span><br><span class="line">    [indexSets addIndex:idx];</span><br><span class="line">&#125;];</span><br><span class="line">[self.viewModel.listData insertObjects:models atIndexes:indexSets];</span><br><span class="line">[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br><span class="line">    </span><br><span class="line">CGSize afterContentSize = self.tableView.contentSize;</span><br><span class="line">CGPoint afterContentOffset = self.tableView.contentOffset;</span><br><span class="line"></span><br><span class="line">NSArray *subArr = [self.viewModel.listData subarrayWithRange:NSMakeRange(0, models.count)];</span><br><span class="line">float insertCellsH = 0.0;</span><br><span class="line">for (RSChatTaskModel *model in subArr) &#123;</span><br><span class="line">    insertCellsH += [model.height floatValue];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CGPoint newContentOffset = CGPointMake(afterContentOffset.x, beforeContentOffset.y + (afterContentSize.height - beforeContentSize.height));</span><br><span class="line">[self.tableView setContentOffset:newContentOffset animated:NO];</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/设置UITableViewCell之间的间距-推荐第四种/" rel="next" title="设置UITableViewCell之间的间距(推荐第四种)">
+                <i class="fa fa-chevron-left"></i> 设置UITableViewCell之间的间距(推荐第四种)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/08/work-on-personal-pc-test/" rel="prev" title="work on personal pc test">
+                work on personal pc test <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

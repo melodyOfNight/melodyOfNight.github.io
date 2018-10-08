@@ -1,0 +1,794 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="锁," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Somewhere out there on the internet, there’s a “showdown” between @synchronized, NSLock, pthread mutexes, and OSSpinLock. It aims to measure their performance relative to each other, but uses sloppy c">
+<meta name="keywords" content="锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="@synchronized, NSLock, pthread, OSSpinLock showdown, done right">
+<meta property="og:url" content="http://yoursite.com/2015/12/02/synchronized-NSLock-pthread-OSSpinLock-showdown-done-right/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="Somewhere out there on the internet, there’s a “showdown” between @synchronized, NSLock, pthread mutexes, and OSSpinLock. It aims to measure their performance relative to each other, but uses sloppy c">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/LockPerformance.png">
+<meta property="og:updated_time" content="2015-12-06T11:01:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="@synchronized, NSLock, pthread, OSSpinLock showdown, done right">
+<meta name="twitter:description" content="Somewhere out there on the internet, there’s a “showdown” between @synchronized, NSLock, pthread mutexes, and OSSpinLock. It aims to measure their performance relative to each other, but uses sloppy c">
+<meta name="twitter:image" content="http://yoursite.com/images/LockPerformance.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/12/02/synchronized-NSLock-pthread-OSSpinLock-showdown-done-right/"/>
+
+
+
+
+
+  <title>@synchronized, NSLock, pthread, OSSpinLock showdown, done right | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/02/synchronized-NSLock-pthread-OSSpinLock-showdown-done-right/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">@synchronized, NSLock, pthread, OSSpinLock showdown, done right</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-02T11:13:08+08:00">
+                2015-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios-进阶/" itemprop="url" rel="index">
+                    <span itemprop="name">ios 进阶</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Somewhere out there on the internet, there’s a “showdown” between @synchronized, NSLock, pthread mutexes, and OSSpinLock. It aims to measure their performance relative to each other, but uses sloppy code to perform the measuring. As a result, while the performance ordering is correct (@synchronized is the slowest, OSSpinLock is the fastest), the relative cost is severely misrepresented. Herein I attempt to rectify that benchmark.<a id="more"></a></p>
+<p>Locking is absolutely required for critical sections. These arise in multithreaded code, and sometimes their performance can have severe consequences in applications. The problem with the aforementioned benchmark is that it did a bunch of extraneous work while it was locking/unlocking. It was doing the same amount of extraneous work, so the relative order was correct (the fastest was still the fastest, the slowest still the slowest, etc), but it didn’t properly show just how much faster the fastest was.</p>
+<p>In the benchmark, the author used autorelease pools, allocated objects, and then released them all.  While locking.  This is a pretty reasonable use-case, but by no means the only one.  For most high-performance, multithreaded code, you’ll spend a <em>bunch</em> of time trying to make the critical sections as small and fast as possible.  Large, slow critical sections effectively undo the multithreading speed up by causing threads to block each other out unnecessarily.  So when you’ve trimmed the critical sections down to the minimum, another sometimes-justified optimization is to optimize the amount of time spent locking/unlocking itself.</p>
+<p>Just to make things exciting though, not all locking primitives are created equal.  Two of the 4 mentioned have special properties that can affect how long they take, and how the operate under pressure.  I’ll get to that towards the end.</p>
+<p>First up, here’s my “no-nonsense” microbench code:</p>
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+#import &lt;objc/runtime.h&gt;
+#import &lt;objc/message.h&gt;
+#import &lt;libkern/OSAtomic.h&gt;
+#import &lt;pthread.h&gt;
+
+#define ITERATIONS (1024*1024*32)
+
+static unsigned long long disp=0, land=0;
+
+int main()
+{
+ double then, now;
+ unsigned int i, count;
+ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+ OSSpinLock spinlock = OS_SPINLOCK_INIT;
+
+ NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
+ NSLock *lock = [NSLock new];
+ then = CFAbsoluteTimeGetCurrent();
+ for(i=0;i&lt;ITERATIONS;++i)
+ {
+ [lock lock];
+ [lock unlock];
+ }
+ now = CFAbsoluteTimeGetCurrent();
+ printf(&quot;NSLock: %f sec\n&quot;, now-then);    
+
+ then = CFAbsoluteTimeGetCurrent();
+ IMP lockLock = [lock methodForSelector:@selector(lock)];
+ IMP unlockLock = [lock methodForSelector:@selector(unlock)];
+ for(i=0;i&lt;ITERATIONS;++i)
+ {
+ lockLock(lock,@selector(lock));
+ unlockLock(lock,@selector(unlock));
+ }
+ now = CFAbsoluteTimeGetCurrent();
+ printf(&quot;NSLock+IMP Cache: %f sec\n&quot;, now-then);    
+
+ then = CFAbsoluteTimeGetCurrent();
+ for(i=0;i&lt;ITERATIONS;++i)
+ {
+ pthread_mutex_lock(&amp;mutex);
+ pthread_mutex_unlock(&amp;mutex);
+ }
+ now = CFAbsoluteTimeGetCurrent();
+ printf(&quot;pthread_mutex: %f sec\n&quot;, now-then);
+
+ then = CFAbsoluteTimeGetCurrent();
+ for(i=0;i&lt;ITERATIONS;++i)
+ {
+ OSSpinLockLock(&amp;spinlock);
+ OSSpinLockUnlock(&amp;spinlock);
+ }
+ now = CFAbsoluteTimeGetCurrent();
+ printf(&quot;OSSpinlock: %f sec\n&quot;, now-then);
+
+ id obj = [NSObject new];
+
+ then = CFAbsoluteTimeGetCurrent();
+ for(i=0;i&lt;ITERATIONS;++i)
+ {
+ @synchronized(obj)
+ {
+ }
+ }
+ now = CFAbsoluteTimeGetCurrent();
+ printf(&quot;@synchronized: %f sec\n&quot;, now-then);
+
+ [pool release];
+ return 0;
+}
+</code></pre><p>We do 5 tests:  We test NSLock, NSLock with IMP caching, pthread mutexes, OSSpinLocks, and then finally @synchronized.  We simply lock and unlock 33554432 times (that’s 1024<em>1024</em>32 for those keeping score at home ;), and see how long it takes.  No allocation, no releases, no autorelease pools, nothing.  Just pure lock/unlock goodness.  I ran the test a few times, and averaged the results (so overall, the results are from something like 100 million lock/unlock cycles each)</p>
+<p>1.NSLock: 3.5175 sec<br>2.NSLock+IMP Cache: 3.1165 sec<br>3.Mutex: 1.5870 sec<br>4.SpinLock: 1.0893<br>5.@synchronized: 9.9488 sec</p>
+<p><img src="../../../../images/LockPerformance.png" alt=""></p>
+<p>From the above graph, we can see a couple thing:  First, @synchronized is <em>Really</em> expensive — like, 3 times as expensive as anything else.  We’ll get into why that is in a moment.  Otherwise, we see that NSLock and NSLock+IMP Cache are pretty close — these are built on top of pthread mutexes, but we have to pay for the extra ObjC overhead.  Then there’s Mutex (pthread mutexes) and SpinLock — these are pretty close, but even then SpinLock is almost 30% faster than Mutex.  We’ll get into that one too.  So from top to bottom we have almost an order of magnitude difference between the worst and best.</p>
+<p>The nice part about these all is that they all take about the same amount of code — using NSLock takes as many lines as a pthread mutex, and the same number for a spinlock.  @synchronized saves a line or two, but with a cost like that it quickly looks unappealing in all but the most trivial of cases.</p>
+<p>So, what makes @sychronized and SpinLock so different from the others?</p>
+<p>@synchronized is very heavy weight because it has to set up an exception handler, and it actually ends up taking a few internal locks on its way there.  So instead of a simple cheap lock, you’re paying for a couple locks/unlocks just to acquire your measly lock.  Those take time.</p>
+<p>OSSpinLock, on the other hand, doesn’t even enter the kernel — it just keeps reloading the lock, hoping that it’s unlocked.  This is terribly inefficient if locks are held for more than a few nanoseconds, but it saves a costly system call and a couple context switches.  Pthread mutexes actually use an OSSpinLock first, to keep things running smoothly where there’s no contention.  When there is, it resorts to heavier, kernel-level locking/tasking stuff.</p>
+<p>So, if you’ve got hotly-contested locks, OSSpinLock probably isn’t for you (unless your critical sections are <em>Really</em> <em>Fast</em>).  Pthread mutexes are a tiny bit more expensive, but they avoid the power-wasting effects of OSSpinLock.</p>
+<p>NSLock is a pretty wrapper on pthread mutexes.  They don’t provide much else, so there’s not much point in using them over pthread mutexes.</p>
+<p>Of course, standard optimization disclaimers apply:  don’t do it until you’re sure you’ve chosen the correct algorithms, have profiled to find hotspots, and have found locking to be one of those hot items.  Otherwise, you’re wasting your time on something that’s likely to provide minimal benefits.</p>
+<p><strong>拓展链接：</strong></p>
+<p><a href="http://ksnowlv.github.io/blog/2014/09/07/ios-tong-bu-suo-xing-neng-dui-bi/" target="_blank" rel="noopener">iOS同步对象性能对比</a></p>
+<p><a href="http://hedengcheng.com/?p=803" target="_blank" rel="noopener">并发编程系列之一：锁的意义</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/锁/" rel="tag"># 锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/19/关于-NSBundle-路径遇到的一点问题/" rel="next" title="关于 NSBundle 路径遇到的一点问题">
+                <i class="fa fa-chevron-left"></i> 关于 NSBundle 路径遇到的一点问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/05/hexo使用markdown插入本地图片/" rel="prev" title="hexo使用markdown插入本地图片">
+                hexo使用markdown插入本地图片 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="git," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="先阐述一下背景和需求： 背景：私人用的 github 有 2 个账号，一个是旧的 github 账号，star 了很多开源库；旧的账号名不好听，新申请了一个 github 账号用于搭建 hexo 博客；再加上公司的 gitlab 账号，总共有 3 个 git 账号。">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git 管理多个ssh key">
+<meta property="og:url" content="http://yoursite.com/2016/07/08/git 管理多个ssh-key/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="先阐述一下背景和需求： 背景：私人用的 github 有 2 个账号，一个是旧的 github 账号，star 了很多开源库；旧的账号名不好听，新申请了一个 github 账号用于搭建 hexo 博客；再加上公司的 gitlab 账号，总共有 3 个 git 账号。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-07-08T15:18:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git 管理多个ssh key">
+<meta name="twitter:description" content="先阐述一下背景和需求： 背景：私人用的 github 有 2 个账号，一个是旧的 github 账号，star 了很多开源库；旧的账号名不好听，新申请了一个 github 账号用于搭建 hexo 博客；再加上公司的 gitlab 账号，总共有 3 个 git 账号。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/08/git 管理多个ssh-key/"/>
+
+
+
+
+
+  <title>git 管理多个ssh key | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/08/git 管理多个ssh-key/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">git 管理多个ssh key</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-08T22:08:02+08:00">
+                2016-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先阐述一下背景和需求：</p>
+<h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>私人用的 github 有 2 个账号，一个是旧的 github 账号，star 了很多开源库；旧的账号名不好听，新申请了一个 github 账号用于搭建 hexo 博客；再加上公司的 gitlab 账号，总共有 3 个 git 账号。</p>
+<a id="more"></a>
+<h1 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h1><p>现在想生成并管理 3 个 git 账号的 ssh key 。</p>
+<p>明确了需求之后，以下是</p>
+<h1 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h1><h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p><strong>1.</strong> 先查看你本地的 <strong>~/.ssh/</strong> 目录下有没有 id_rsa 和 id_rsa.pub 这两个 ssh key 。有的话先删掉，待会儿会重新生成并规范命名。</p>
+<pre><code>ls -al ~/.ssh
+//如果有 id_rsa 和 id_rsa.pub 的话，删除它
+rm -rf ~/.ssh/id_rsa
+rm -rf ~/.ssh/id_rsa.pub
+</code></pre><p><strong>2. </strong>现在重新生成 github 账号的 ssh key。下面以我的 github 账号 melodyOfNight 为例：</p>
+<p> <em>(1)</em> 先 cd 到 <strong>~/.ssh</strong> 目录，然后执行下面命令生成 ssh key。</p>
+<pre><code>ssh-keygen -t rsa -C &quot;aaron.zheng.dev@gmail.com&quot;
+</code></pre><p>第一个回车的时候先别急着往下走，它会提示你输入要保存的 ssh key 的名字，输入一个你自定义的名字，比如这里的 id_rsa_github_melodyOfNight ，接下来的输入密码和确认密码提示就直接回车就行了，这样就在 <strong>~/.ssh/</strong> 目录下生成了 id_rsa_github_melodyOfNight 和 id_rsa_github_melodyOfNight.pub 这两个 key 了，一个是私有的，一个是公有的。</p>
+<p> <em>(2)</em> 把你的 ssh key 添加到 ssh-agent</p>
+<pre><code># ensure ssh-agent is enable ! 
+# start the ssh-agent in the background
+$ eval &quot;$(ssh-agent -s)&quot;
+Agent pid 59566  
+</code></pre><p> .</p>
+<pre><code>$ ssh-add ~/.ssh/id_rsa_github_melodyOfNight
+</code></pre><p><strong>3.</strong> 把你的 ssh key 公钥添加到 github 账号上 。不懂参照<a href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/" target="_blank" rel="noopener">这里</a>喽</p>
+<p><strong>4.</strong> 按照 1、2、3 的方法生成另外 2 个账号的 ssh key ,主要命名要规范且容易区分。</p>
+<p><strong>5.</strong> 创建并修改 config 文件</p>
+<pre><code>$ vi config
+</code></pre><p>添加如下内容：</p>
+<pre><code>#kugou gitlab
+Host http://10.16.1.16/  
+HostName http://10.16.1.16/   //你公司内部的 gitlab 地址
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/id_rsa_kugou
+User aaronzheng
+
+#github chaoyua899
+Host github.com
+HostName github.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/id_rsa_github_chaoyuan899
+User chaoyuan899
+
+#github melodyOfNight
+Host github.com
+HostName github.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/id_rsa_github_melodyOfNight
+User melodyOfNight
+</code></pre><p><strong>6.</strong> 测试</p>
+<pre><code>$ ssh -T git@github.com              
+Hi melodyOfNight! You&apos;ve successfully authenticated, but GitHub does not provide shell access.
+</code></pre><p>Note:如果到这里你没有成功的话，别急，教你解决问题的终极办法–debug</p>
+<p>比如测试github，</p>
+<pre><code>ssh -vT git@github.com
+</code></pre><p>-v 是输出编译信息，然后根据编译信息自己去解决问题吧。就我自己来说一般是config里的host那块写错了。</p>
+<p><strong>7.</strong> 最后关键的一点，如果之前你有设置过全局 git 用户名和 email 的话，现在要重置一下，要不然进行 git 操作的话会出错。</p>
+<pre><code>git config --global --unset user.name
+git config --global --unset user.email
+</code></pre><p>然后在不同的仓库下设置局部的用户名和邮箱</p>
+<p>比如在公司的repository下</p>
+<pre><code>git config user.name &quot;yourname&quot;  
+git config user.email &quot;youremail&quot; 
+</code></pre><p>在自己的github的仓库在执行刚刚的命令一遍即可。</p>
+<p>这样就可以在不同的仓库，以不同的账号登录。 </p>
+<p>参考链接：</p>
+<ul>
+<li>github 官方给出的 <a href="https://help.github.com/articles/generating-an-ssh-key/" target="_blank" rel="noopener">generating-an-ssh-key</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/08/心动过的旋律/" rel="next" title="心动过的旋律">
+                <i class="fa fa-chevron-left"></i> 心动过的旋律
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/10/消息传递-objc-msgSend-是如何工作的/" rel="prev" title="消息传递 objc_msgSend 是如何工作的">
+                消息传递 objc_msgSend 是如何工作的 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景："><span class="nav-number">1.</span> <span class="nav-text">背景：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#需求："><span class="nav-number">2.</span> <span class="nav-text">需求：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方法："><span class="nav-number">3.</span> <span class="nav-text">解决方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#步骤"><span class="nav-number">3.1.</span> <span class="nav-text">步骤</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="NAL 简介NAL 全称 Network Abstract Layer, 即网络抽象层。在H.264/AVC 视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL），其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="H.264 的 NAL 单元及码流结构">
+<meta property="og:url" content="http://yoursite.com/2017/07/16/H.264 的 NAL 单元及码流结构/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="NAL 简介NAL 全称 Network Abstract Layer, 即网络抽象层。在H.264/AVC 视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL），其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/H.264码流结构">
+<meta property="og:image" content="http://yoursite.com/images/NAL单元解码的流程">
+<meta property="og:updated_time" content="2017-07-30T09:49:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="H.264 的 NAL 单元及码流结构">
+<meta name="twitter:description" content="NAL 简介NAL 全称 Network Abstract Layer, 即网络抽象层。在H.264/AVC 视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL），其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL">
+<meta name="twitter:image" content="http://yoursite.com/images/H.264码流结构">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/16/H.264 的 NAL 单元及码流结构/"/>
+
+
+
+
+
+  <title>H.264 的 NAL 单元及码流结构 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/16/H.264 的 NAL 单元及码流结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">H.264 的 NAL 单元及码流结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T15:58:55+08:00">
+                2017-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="NAL-简介"><a href="#NAL-简介" class="headerlink" title="NAL 简介"></a>NAL 简介</h1><p><code>NAL</code> 全称 Network Abstract Layer, 即网络抽象层。在<code>H.264/AVC</code> 视频编码标准中，整个系统框架被分为了两个层面：<code>视频编码层面（VCL）</code>和<code>网络抽象层面（NAL）</code>，其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL 的称为原始字节序列荷载（RBSP）的字节流。</p>
+<a id="more"></a>
+<p><code>NAL单元</code>是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL 的称为原始字节序列载荷（RBSP）的字节流。头信息中包含着一个可否丢弃的指示标记，标识着该 NAL 单元的丢弃能否引起错误扩散，一般，如果 NAL 单元中的信息不用于构建参考图像，则认为可以将其丢弃；最后包含的是 NAL 单元的类型信息，暗示着其内含有效载荷的内容。在 RBSP 的最后包含一个 比特 1 若干比特 0，以便字节对齐。</p>
+<p>H.264 的编码视频序列包括一系列的 NAL 单元,每个 NAL 单元包含一个 RBSP。编码片(包括数据分割片 IDR 片)和序列 RBSP 结束符被定义为 VCL NAL 单元,其余为 NAL 单元。</p>
+<p>典型的 RBSP 单元序列。每个单元都按独立的 NAL 单元传送。NAL单元的类型如下表所示</p>
+<table>
+<thead>
+<tr>
+<th>NAL Type</th>
+<th>Description</th>
+<th>VCL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>未规定</td>
+<td>N/A</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>非 DIR 图像中不采用数据划分 Slice</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>非 DIR 图像中 A 类数据划分 Slice</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>非 DIR 图像中 B 类数据划分 Slice</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>非 DIR 图像中 C 类数据划分 Slice</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>IDR 图像的 Slice,Coded Video Sequence 的 Access Unit</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>补充增强信息（SEI）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>序列参数集（SPS）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>图像参数集（PPS）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>分割符（Access Unit Delimiter）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>序列结束符（End of Sequence）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>流结束符（End of Stream）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>填充数据（Filler）</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>保留</td>
+<td>N/A</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>未规定</td>
+<td>N/A</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="H-264-码流结构"><a href="#H-264-码流结构" class="headerlink" title="H.264 码流结构"></a>H.264 码流结构</h1><p>H.264 的码流结构如下图所示：</p>
+<p><img src="../../../../images/H.264码流结构" alt="H.264码流结构"></p>
+<p><strong>Annexb格式：</strong> NALU数据+起始码，如果 NALU 对应的 Slice 为一帧的开始,则用 <code>4</code> 字节表示,即 <code>0x00000001</code>；否则用 <code>3</code> 字节表示,<code>0x000001</code>。</p>
+<blockquote>
+<p>解惑：一个字节是由几个16进制的位组成? </p>
+<p>两个16进制数!</p>
+<p>一个字节八个比特,就是八个二进制位</p>
+<p>四个二进制数最大表示为15,就是一个16进制数,所以八位可以表示成两个16进制的数!</p>
+</blockquote>
+<p><strong>RTP格式：</strong> NALU 数据 + RTP 协议的 RTP 头数据。</p>
+<p><strong>NAL Header：</strong> <code>forbidden_bit</code>,<code>nal_reference_bit(优先级)</code>,<code>nal_unit_type(类型)</code>。</p>
+<p><strong>脱壳操作：</strong> 为了使 NALU 主体不包括起始码,在编码时每遇到两个字节(连续)的0，就插入一字节 <code>0x03</code>，以和起始码相区别。解码时,则将相应的 0x03 删除掉</p>
+<h1 id="H-264解码"><a href="#H-264解码" class="headerlink" title="H.264解码"></a>H.264解码</h1><p>NAL 头信息的 nal_referrence_idc(NRI)用于在重建过程中标记一个 NAL 单元的重要性，值为 0 表示这个 NAL 单元没有用预测，因此可以被解码器抛弃而不会有错误扩散；值高于 0 表示 NAL 单元要用于无漂移重构，且值越高，对此 NAL 单元丢失的影响越大。</p>
+<p>NAL 头信息的隐藏比特位，在 H.264 编码器中默认为 0,当网络识别到单元中存在比特错误时，可将其置为 1。隐藏比特位主要用于适应不同种类的网络环境(比如有线无线相结合的环境)。</p>
+<p>NAL 单元解码的流程为：首先从 NAL 单元中提取出 RBSP 语法结构，然后按照下图所示的流程处理 RBSP 语法结构。输入的是 NAL 单元，输出结果是经过解码的当前图像的样值点。</p>
+<p><img src="../../../../images/NAL单元解码的流程" alt="NAL单元解码的流程"></p>
+<p>NAL 单元中分别包含了序列参数集和图像参数集。图像参数集和序列参数集在其他NAL 单元传输过程中作为参考使用,在这些数据 NAL 单元的片头中，通过语法元素 pic_parameter_set_id 设置它们所使用的图像参数集编号；而相应的每个图像参数集中，通过语法元素 seq_paramter_set_id 设置他们使用的序列参数集编号。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/12/iOS高级调试-逆向技术-汇编寄存器调用/" rel="next" title="iOS高级调试&逆向技术-汇编寄存器调用">
+                <i class="fa fa-chevron-left"></i> iOS高级调试&逆向技术-汇编寄存器调用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/30/iOS日志查看/" rel="prev" title="iOS日志查看">
+                iOS日志查看 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NAL-简介"><span class="nav-number">1.</span> <span class="nav-text">NAL 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#H-264-码流结构"><span class="nav-number">2.</span> <span class="nav-text">H.264 码流结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#H-264解码"><span class="nav-number">3.</span> <span class="nav-text">H.264解码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

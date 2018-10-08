@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="树的定义 树是n(n&amp;gt;=0)个结点的有限集。n=0 时称为空树。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构 - 树">
+<meta property="og:url" content="http://yoursite.com/2017/07/05/数据结构-树/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="树的定义 树是n(n&amp;gt;=0)个结点的有限集。n=0 时称为空树。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/树-结点.png">
+<meta property="og:image" content="http://yoursite.com/images/树-孩子表示法.png">
+<meta property="og:image" content="http://yoursite.com/images/树-孩子表示法2.png">
+<meta property="og:image" content="http://yoursite.com/images/树-孩子兄弟表示法.png">
+<meta property="og:image" content="http://yoursite.com/images/二叉树-链表存储结构.png">
+<meta property="og:image" content="http://yoursite.com/images/二叉树-链表存储结构图.png">
+<meta property="og:updated_time" content="2017-07-13T10:26:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构 - 树">
+<meta name="twitter:description" content="树的定义 树是n(n&amp;gt;=0)个结点的有限集。n=0 时称为空树。">
+<meta name="twitter:image" content="http://yoursite.com/images/树-结点.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/05/数据结构-树/"/>
+
+
+
+
+
+  <title>数据结构 - 树 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/05/数据结构-树/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构 - 树</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-05T19:56:50+08:00">
+                2017-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h1><blockquote>
+<p>树是n(n&gt;=0)个结点的有限集。n=0 时称为空树。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="结点的分类"><a href="#结点的分类" class="headerlink" title="结点的分类"></a>结点的分类</h2><blockquote>
+<p>结点拥有的子树数称为结点的度(Degree)。度为 0 的结点称为叶结点(Leaf)或者终端结点；度不为 0 的结点称为非终端结点或者分支结点。除根结点之外，分支结点也称为内部结点。树的度是树内各结点的度的最大值。</p>
+</blockquote>
+<p>如下图，因为这棵树结点的度的最大值是结点 D 的度，为 3，所以树的度也为 3。</p>
+<p><img src="../../../../images/树-结点.png" alt="树-结点"></p>
+<h1 id="树的存储结构"><a href="#树的存储结构" class="headerlink" title="树的存储结构"></a>树的存储结构</h1><p>有<code>双亲表示法</code>、<code>孩子表示法</code>、<code>孩子兄弟表示法</code> 3 种表示法表示树的结构。</p>
+<ul>
+<li><strong>双亲表示法</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>data</th>
+<th>parent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中，data 是数据域，存储结点的数据信息；而 parent 是指针域，存储该结点的双亲在数组中的下标。以上数据结构可拓展，比如加入个孩子结点域firstchild或者加个右兄弟域rightsib。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#define MAX_TREE_SIZE 100</span><br><span class="line"></span><br><span class="line">typedef int TElemType;</span><br><span class="line"></span><br><span class="line">typedef struct PTNode</span><br><span class="line">&#123;</span><br><span class="line">    TElemType data; //结点数据域</span><br><span class="line">    int parent;     //双亲位置</span><br><span class="line">&#125;PTNode;</span><br><span class="line"></span><br><span class="line">typedef struct      //树结构</span><br><span class="line">&#123;</span><br><span class="line">    PTNode nodes[MAX_TREE_SIZE];    //结点数组</span><br><span class="line">    int r, n;       //根的位置和结点数</span><br><span class="line">&#125; PTree;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>孩子表示法</strong></li>
+</ul>
+<blockquote>
+<p>把每个结点的孩子结点排列起来，以单链表做存储结构，则 n 个结点有 n 个孩子链表，如果是叶子结点则此单链表为空。然后 n 个头指针又组成一个线性表，采用顺序存储结构，存放进一个一维数组中。</p>
+</blockquote>
+<p>如下：</p>
+<p><img src="../../../../images/树-孩子表示法.png" alt="树-孩子表示法"></p>
+<p>为此，设计两种结点结构，一个是孩子链表的孩子结点。</p>
+<table>
+<thead>
+<tr>
+<th>child</th>
+<th>next</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中 child 是数据域，用来存储某个结点在表头数组中的下标。next 是指针域，用来存储指向某个结点的下一个孩子结点的指针。</p>
+<p>另一个是表头数组的表头结点，如下：</p>
+<table>
+<thead>
+<tr>
+<th>data</th>
+<th>firstchild</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中 data 是数据域，存储某结点的数据信息。firstchild 是头指针域，存储该结点的孩子链表的头指针。</p>
+<p>以下是孩子表示法的结构定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">/*数的孩子表示法结构定义*/</span><br><span class="line">#define MAX_TREE_SIZE 100</span><br><span class="line"></span><br><span class="line">typedef int TElemType;</span><br><span class="line"></span><br><span class="line">typedef struct CTNode //孩子结点</span><br><span class="line">&#123;</span><br><span class="line">    int child;</span><br><span class="line">    struct CTNode *next;</span><br><span class="line">&#125; *ChildPtr;</span><br><span class="line"></span><br><span class="line">typedef  struct //表头结构</span><br><span class="line">&#123;</span><br><span class="line">    TElemType data;</span><br><span class="line">    ChildPtr firstchild;</span><br><span class="line">&#125;CTBox;</span><br><span class="line"></span><br><span class="line">typedef struct //树结构</span><br><span class="line">&#123;</span><br><span class="line">    CTBox nodes[MAX_TREE_SIZE]; //结点数组</span><br><span class="line">    int r, n;   //根的位置和结点树</span><br><span class="line">&#125;CTree;</span><br></pre></td></tr></table></figure>
+<p>这样的结构对于我们要查找某个结点的某个孩子，或者找某个结点的兄弟，只需要查找这个结点的孩子单链表即可。对于遍历整棵树也是很方便的，对头结点的数组循环即可。</p>
+<p>但是，如果要寻找某个结点的双亲是谁就会比较麻烦，需要遍历整棵树才行。这时候稍微改下设计就好了，添加个父结点域。如下：</p>
+<p><img src="../../../../images/树-孩子表示法2.png" alt="树-孩子表示法2"></p>
+<ul>
+<li><strong>孩子兄弟表示法</strong></li>
+</ul>
+<p>结点结构设计如下：</p>
+<table>
+<thead>
+<tr>
+<th>data</th>
+<th>firstchild</th>
+<th>rightsib</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中 data 是数据域，firstchild 为指针域，存储该结点的第一个孩子结点的存储地址，rightsib 是指针域，存储该结点的右兄弟结点的存储地址。</p>
+<p>结构定义代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#define MAX_TREE_SIZE 100</span><br><span class="line"></span><br><span class="line">typedef int TElemType;</span><br><span class="line"></span><br><span class="line">typedef struct CSNode</span><br><span class="line">&#123;</span><br><span class="line">    TElemType data;</span><br><span class="line">    struct CSNode *firstchild, *rightsib;</span><br><span class="line">&#125; CSNode, *CSTree;</span><br></pre></td></tr></table></figure></p>
+<p><img src="../../../../images/树-孩子兄弟表示法.png" alt="树-孩子兄弟表示法"></p>
+<h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><blockquote>
+<p>二叉树（Binary Tree）是 n(n&gt;=0)个结点的有限集合，改集合或者为空集（称为空二叉树）,或者由一个根结点和两颗互不相交的、分别称为根节点的左子树和右子树的二叉树组成。</p>
+</blockquote>
+<p>二叉树具有五种基本形态：</p>
+<ol>
+<li>空二叉树</li>
+<li>只有一个根结点</li>
+<li>根结点只有左子树</li>
+<li>根结点只有右子树</li>
+<li>根结点既有左子树又有右子树</li>
+</ol>
+<h2 id="特殊二叉树"><a href="#特殊二叉树" class="headerlink" title="特殊二叉树"></a>特殊二叉树</h2><ul>
+<li>斜树</li>
+</ul>
+<p>所有结点都只有左子树的二叉树叫左斜树；所有结点都只有右子树的二叉树叫右斜树。这两者统称为斜树。</p>
+<ul>
+<li>满二叉树</li>
+</ul>
+<p>在一棵二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上，这样的二叉树称为满二叉树。</p>
+<ul>
+<li>完全二叉树</li>
+</ul>
+<p>对一棵具有 n 个结点的二叉树按层序编号，如果编号为 i（1&lt;=i&lt;=n）的结点与同样深度的满二叉树中编号为 i 的结点在二叉树中位置完全相同，则这棵二叉树称为完全二叉树。</p>
+<h2 id="二叉树性质"><a href="#二叉树性质" class="headerlink" title="二叉树性质"></a>二叉树性质</h2><h2 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h2><p><img src="../../../../images/二叉树-链表存储结构.png" alt="二叉树-链表存储结构"></p>
+<p>其中，data 是数据域，lchild 和 rchild 是指针域，分别存放指向左孩子和右孩子的指针。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">typedef int TElemType;</span><br><span class="line"></span><br><span class="line">/*二叉树的二叉链表结点结构定义*/</span><br><span class="line">typedef struct BiTNode  //结点结构</span><br><span class="line">&#123;</span><br><span class="line">    TElemType data;</span><br><span class="line">    struct BiTNode *lchild, *rchild;</span><br><span class="line">&#125;BiTNode, *BiTree;</span><br></pre></td></tr></table></figure>
+<p><img src="../../../../images/二叉树-链表存储结构图.png" alt="二叉树-链表存储结构图"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/31/常用排序算法/" rel="next" title="常用排序算法">
+                <i class="fa fa-chevron-left"></i> 常用排序算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/12/iOS高级调试-逆向技术-汇编寄存器调用/" rel="prev" title="iOS高级调试&逆向技术-汇编寄存器调用">
+                iOS高级调试&逆向技术-汇编寄存器调用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#树的定义"><span class="nav-number">1.</span> <span class="nav-text">树的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结点的分类"><span class="nav-number">1.1.</span> <span class="nav-text">结点的分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的存储结构"><span class="nav-number">2.</span> <span class="nav-text">树的存储结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二叉树"><span class="nav-number">3.</span> <span class="nav-text">二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊二叉树"><span class="nav-number">3.1.</span> <span class="nav-text">特殊二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树性质"><span class="nav-number">3.2.</span> <span class="nav-text">二叉树性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储结构"><span class="nav-number">3.3.</span> <span class="nav-text">存储结构</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

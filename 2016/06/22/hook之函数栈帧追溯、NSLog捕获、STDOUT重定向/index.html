@@ -1,0 +1,795 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="捕获日志," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="栈帧的追溯需要用到函数： int backtrace(void**,int); char** backtrace_symbols(void* const*,int); 用法和 linux 上一样，参考链接：这里">
+<meta name="keywords" content="捕获日志">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hook之函数栈帧追溯、NSLog捕获、STDOUT重定向">
+<meta property="og:url" content="http://yoursite.com/2016/06/22/hook之函数栈帧追溯、NSLog捕获、STDOUT重定向/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="栈帧的追溯需要用到函数： int backtrace(void**,int); char** backtrace_symbols(void* const*,int); 用法和 linux 上一样，参考链接：这里">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-07-08T13:58:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hook之函数栈帧追溯、NSLog捕获、STDOUT重定向">
+<meta name="twitter:description" content="栈帧的追溯需要用到函数： int backtrace(void**,int); char** backtrace_symbols(void* const*,int); 用法和 linux 上一样，参考链接：这里">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/22/hook之函数栈帧追溯、NSLog捕获、STDOUT重定向/"/>
+
+
+
+
+
+  <title>hook之函数栈帧追溯、NSLog捕获、STDOUT重定向 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/22/hook之函数栈帧追溯、NSLog捕获、STDOUT重定向/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hook之函数栈帧追溯、NSLog捕获、STDOUT重定向</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-22T18:04:23+08:00">
+                2016-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios-进阶/" itemprop="url" rel="index">
+                    <span itemprop="name">ios 进阶</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>栈帧的追溯需要用到函数：</p>
+<pre><code>int backtrace(void**,int);
+char** backtrace_symbols(void* const*,int);
+</code></pre><p>用法和 linux 上一样，参考链接：<a href="http://man7.org/linux/man-pages/man3/backtrace.3.html" target="_blank" rel="noopener">这里</a></p>
+<a id="more"></a>
+<p>例如可以把追溯功能放到我的 hook 程序里：</p>
+<pre><code>FILE *my_fopen(const char *path, const char *mode)
+{
+FILE *fp;
+void *buffer[100];
+char **strings;
+int nptrs, j;
+
+fp = org_fopen(path, mode);
+log_progress(“fopen(%s, %s)=%08x\n”, path, mode, fp);
+nptrs = backtrace(buffer, 100);
+strings = (char **)backtrace_symbols(buffer, nptrs);
+if (strings == NULL)
+return fp;
+for (j = 0; j &lt; nptrs; j++)
+log_progress(“%s\n”, strings[j]);
+free(strings);
+return fp;
+}
+</code></pre><p>在动态库初始化的时候挂接 hook 点：</p>
+<pre><code>MSHookFunction(fopen, my_fopen, (void **)&amp;org_fopen);
+</code></pre><p>看到的效果如下：</p>
+<pre><code>fopen(/var/mobile/Applications/39809BB6-96CE-4DE5-8701-44B3AB7738D2/tdbeta.app/Data/unity default resources, rb)=012e224c
+0   testlib.dylib                       0x011fa95c my_fopen + 100
+1   tdbeta                              0x00afe5b8 tdbeta + 11523512
+2   tdbeta                              0x00afe8d4 tdbeta + 11524308
+3   tdbeta                              0x00ae9a48 tdbeta + 11438664
+4   tdbeta                              0x00ae9ad8 tdbeta + 11438808
+5   tdbeta                              0x00aef7a4 tdbeta + 11462564
+6   tdbeta                              0x00aeaeb8 tdbeta + 11443896
+7   tdbeta                              0x00aec688 tdbeta + 11449992
+8   tdbeta                              0x009a5538 tdbeta + 10110264
+9   tdbeta                              0x00abb7f0 tdbeta + 11249648
+10  tdbeta                              0x009c6c74 tdbeta + 10247284
+11  tdbeta                              0x00ac0710 tdbeta + 11269904
+12  tdbeta                              0x00ab242c tdbeta + 11211820
+13  tdbeta                              0x008f0190 tdbeta + 9367952
+14  tdbeta                              0x000047dc tdbeta + 14300
+15  Foundation                          0×32591277 &lt;redacted&gt; + 450
+16  CoreFoundation                      0x31c585df &lt;redacted&gt; + 14
+17  CoreFoundation                      0x31c58291 &lt;redacted&gt; + 272
+18  CoreFoundation                      0x31c56f01 &lt;redacted&gt; + 1232
+19  CoreFoundation                      0x31bc9ebd CFRunLoopRunSpecific + 356
+20  CoreFoundation                      0x31bc9d49 CFRunLoopRunInMode + 104
+21  GraphicsServices                    0x357a02eb GSEventRunModal + 74
+22  UIKit                               0x33adf301 UIApplicationMain + 1120
+23  spad.dylib                          0x0138b807 _Z21new_UIApplicationMainiPPcP8NSStringS2_ + 238
+24  tdbeta                              0×00005014 tdbeta + 16404
+25  tdbeta                              0x00003bf8 tdbeta + 11256
+</code></pre><p>那么，如何记录 NSLog 函数的输出？</p>
+<p>首先看 NSLog 函数的调用关系：</p>
+<pre><code>NSlog-&gt;_CFLogvEx-&gt;0x32262f20
+</code></pre><p>_CFLogvEx 调用：</p>
+<pre><code>CFStringCreateWithFormatAndArgumentsAux
+CFStringGetLength
+CFStringGetMaximumSizeForEncoding
+</code></pre><p>进行字符串格式化，然后 malloc 一块内存通过 CFStringGetCString 写入函数 0x32262f20 </p>
+<p>调用：CFAbsoluteTimeGetCurrent 获得系统时间 CFGetProgname 获得 mach-o 文件名，</p>
+<p>getpid 获得进程 pid</p>
+<p>然后重点来了：</p>
+<pre><code>0x32263250 &lt;&lt;redacted&gt;+816&gt;:    movs    r0, #2
+0x32263252 &lt;&lt;redacted&gt;+818&gt;:    blx     0x322b541c &lt;dyld_stub_writev&gt;
+</code></pre><p>没错，写入文件句柄2，也就是 stderr</p>
+<p>writev 执行完之后，可以在 stderr 上看到格式化好的字符串，例如：</p>
+<pre><code>2013-12-30 23:57:29.292 tdbeta[835:907] -&gt; registered mono modules 0xf9b580
+</code></pre><p><b>结论</b>：要获得 NSLog 输出的信息只需要重定向 stderr （<del>结论的描述好像不是很准确哦，重定向 stderr 只是将错误信息重定向而已，而 NSLog 也包含其他输出，这时候就要用将标准输出重定向到文件了，用这个函数</del></p>
+<pre><code>dup2(fd,1)// fd 是文件句柄，1 是 STDOUT_FILENO
+</code></pre><p>换句话说，要 hook NSLog 只要将标准输出和错误输出重定向到文件即可。</p>
+<p>如何做重定向？</p>
+<p>重定向只需要创建一个文件，然后将其句柄通过函数 dup2 传入，替换掉默认的句柄就好了。</p>
+<p>将下面代码放到动态库 init 函数里，然后去看这个 log 文件吧。</p>
+<pre><code>int substrateInit(void)
+{
+  int fd;
+  char pathBuffer[BUFSIZE];
+  fflush(stdout);
+  fflush(stderr);
+  snprintf(pathBuffer, sizeof(pathBuffer), &quot;%s/Library/stdout-%li.log&quot;, getenv(&quot;HOME&quot;), time(NULL));
+  setvbuf(stdout,NULL,_IONBF,0);
+  fd = open(pathBuffer, (O_RDWR | O_CREAT), 0644);
+  dup2(fd, STDOUT_FILENO);
+  dup2(fd, STDERR_FILENO);
+  printf(&quot;Here is dll init, redirect stdout and stderr to logfile\n&quot;);
+  return 0;
+} 
+</code></pre><p>假如现在要切换为原来的终端显示的话，又要怎么做呢？看一下<a href="http://blog.donews.com/mutecat/archive/2007/09/20/1212178.aspx" target="_blank" rel="noopener">解惑 dup/dup2</a>或许就可以找到答案了。</p>
+<p>文章转自<a href="http://bbs.pediy.com/showthread.php?t=183190" target="_blank" rel="noopener">看雪论坛</a> <b>jerryxjtu</b> 大神写的帖子。</p>
+<p>参考链接：</p>
+<p><a href="http://blog.csdn.net/zhouhong1026/article/details/8151235" target="_blank" rel="noopener">Linux 管道编程技术：dup 函数，dup2 函数，open 函数详解</a></p>
+<p><a href="http://www.cnblogs.com/caolisong/archive/2007/04/25/726896.html" target="_blank" rel="noopener">linux shell 中“2&gt;&amp;1”含义</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/捕获日志/" rel="tag"># 捕获日志</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/27/开发中遇到的一些疑难点/" rel="next" title="开发中遇到的一些疑难点">
+                <i class="fa fa-chevron-left"></i> 开发中遇到的一些疑难点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/30/多任务/" rel="prev" title="多任务">
+                多任务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

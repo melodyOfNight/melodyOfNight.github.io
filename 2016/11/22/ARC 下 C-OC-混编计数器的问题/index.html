@@ -1,0 +1,745 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="ARC 模式下，object-C 编写的代码的内存管理都交给了自动引用计数器了，不用我们自己再去操心内存的管理，但使用 Core Foundation 框架或者是和 C++ 混编时，代码的内存还是需要我们自己去管理的，这时候就需要注意了！ Core Foundation 主要是由不透明类型(opaque type)，即 C 结构体组成，语言层面并不支持继承和多态，而 Core Foundation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARC 下 C++&#x2F;OC 混编计数器的问题">
+<meta property="og:url" content="http://yoursite.com/2016/11/22/ARC 下 C-OC-混编计数器的问题/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="ARC 模式下，object-C 编写的代码的内存管理都交给了自动引用计数器了，不用我们自己再去操心内存的管理，但使用 Core Foundation 框架或者是和 C++ 混编时，代码的内存还是需要我们自己去管理的，这时候就需要注意了！ Core Foundation 主要是由不透明类型(opaque type)，即 C 结构体组成，语言层面并不支持继承和多态，而 Core Foundation">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/retainCount.png">
+<meta property="og:image" content="http://yoursite.com/images/SemanticsOfInit.png">
+<meta property="og:image" content="http://yoursite.com/images/ns_consumed.png">
+<meta property="og:image" content="http://yoursite.com/images/ConsumedParameters.png">
+<meta property="og:image" content="http://yoursite.com/images/retainCount2.png">
+<meta property="og:updated_time" content="2016-11-26T10:28:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ARC 下 C++&#x2F;OC 混编计数器的问题">
+<meta name="twitter:description" content="ARC 模式下，object-C 编写的代码的内存管理都交给了自动引用计数器了，不用我们自己再去操心内存的管理，但使用 Core Foundation 框架或者是和 C++ 混编时，代码的内存还是需要我们自己去管理的，这时候就需要注意了！ Core Foundation 主要是由不透明类型(opaque type)，即 C 结构体组成，语言层面并不支持继承和多态，而 Core Foundation">
+<meta name="twitter:image" content="http://yoursite.com/images/retainCount.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/22/ARC 下 C-OC-混编计数器的问题/"/>
+
+
+
+
+
+  <title>ARC 下 C++/OC 混编计数器的问题 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/ARC 下 C-OC-混编计数器的问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ARC 下 C++/OC 混编计数器的问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-22T16:47:54+08:00">
+                2016-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ARC 模式下，<code>object-C</code> 编写的代码的内存管理都交给了自动引用计数器了，不用我们自己再去操心内存的管理，但使用 <code>Core Foundation</code> 框架或者是和 <code>C++</code> 混编时，代码的内存还是需要我们自己去管理的，这时候就需要注意了！</p>
+<p><code>Core Foundation</code> 主要是由不透明类型(opaque type)，即 C 结构体组成，语言层面并不支持继承和多态，而 <code>Core Foundation</code>能够制造出对象具有层次结构的假象是因为它的根“类” <code>CFType</code> 对象的指针 <code>CFTypeRef</code> 是 <code>void *</code> 类型的。</p>
+<a id="more"></a>
+<p><code>Core Foundation</code> 内存管理方式：</p>
+<ul>
+<li>如果创建或者复制对象，你就是所有者，比如以 <strong>create</strong> 或者 <strong>copy</strong> 开头的函数，那调用者就是返回对象的所有者。</li>
+<li>如果没有创建或者复制对象，你不是所有者。这是如果不想让对象被销毁，就必须调用 <code>CFRetain</code> 来成为所有者。</li>
+<li>如果你是对象的所有者，就必须在用完对象后调用 <code>CFRelease</code>。</li>
+</ul>
+<hr>
+<p><code>C++</code> 和 <code>object-C</code> 混编时，<code>C++</code> 代码的内存管理方式和 <code>Core Foundation</code> 类似，在使用完 <code>C++</code> 对象后，必须先 delete 掉该对象，然后置为 NULL 。</p>
+<p>先来看一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)init</span><br><span class="line">	&#123;</span><br><span class="line">	    self = [super init];</span><br><span class="line">	    if (self) &#123;</span><br><span class="line">	        _listener = new KGCorePlayerListener(self); //1</span><br><span class="line">	        [self setListener:_listener];</span><br><span class="line">	    &#125;</span><br><span class="line">	    return self;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>init</code> 函数里面调用了 <code>C++</code> 函数，并把 self 作为形参传递过去，执行完函数后发现 self 的计数器变为 <strong>2</strong> 了！很奇怪，断点看了一下</p>
+<p><img src="../../../../images/retainCount.png" alt=""></p>
+<p>查看了 1 的实现，发现函数将传过去的 self 给 capture 了。查阅了资料，发现了<a href="http://clang.llvm.org/docs/AutomaticReferenceCounting.html#semantics-of-init" target="_blank" rel="noopener">这个</a></p>
+<p><img src="../../../../images/SemanticsOfInit.png" alt=""></p>
+<p>然后就以为在 <code>init</code> 方法族里面，将 self 作为参数传递给其他函数使用的都会导致 <strong>return a retained object</strong> ，后来我发现我错了！</p>
+<ul>
+<li>错误1：并不是将 self 作为形参传递给其他类就会导致计数器 +1，除非接收类 capture 了 self 才会导致 retainCount +1；不 capture 的话是不会 +1 的。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">KGCorePlayerListener::KGCorePlayerListener( id&lt;KGCorePlayerListenerProtocol&gt; manager)</span><br><span class="line">: mManager( manager )</span><br><span class="line">&#123;</span><br><span class="line">	 //将传进来的 self 赋值给成员变量 manager 了，计数器 +1 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>错误2：当把 self 作为参数传递时并不是只在 init 方法族里面才会导致计数器 +1，其他方法也一样会。</li>
+</ul>
+<p>针对以上出现的问题，当你想销毁该实例时（以 KGTingPlayerManager 为例），简单的将 _tingPlayerManager = nil 是并不会导致调用到 dealloc 方法，置为 nil 后计数器变为 1 。</p>
+<p>解决办法的思路无非就是将 retainCount 降到 0 </p>
+<p><strong>方法一:</strong></p>
+<p>先释放掉之前被 capture 的 self ，最后再将 _tingPlayerManager 置为 nil ，最传统也是最实用的方法，本来的写法也应该是这样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-(void)destroy &#123;</span><br><span class="line">    </span><br><span class="line">[self setListener:nil];</span><br><span class="line">if (_listener) &#123;</span><br><span class="line">    delete _listener;</span><br><span class="line">    _listener = 0;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>方法二：</strong></p>
+<p>利用 Clang 的编译属性 <code>__attribute((ns_consumed))</code> 关于这个属性的介绍看下面</p>
+<p><img src="../../../../images/ns_consumed.png" alt=""></p>
+<p><img src="../../../../images/ConsumedParameters.png" alt=""></p>
+<p>所以在定义函数或者方法时，可以为该函数的参数指定 <code>__attribute((ns_consumed))</code> 属性，静态分析器会在函数调用结束的时候发送一个 relese 消息，所以在返回给调用者的时候计数器并不会 + 1 。</p>
+<p>有一点需要特别注意的是，它是有按照 <strong>passing an argument</strong> 还是 <strong>receiving an argument</strong> 来分别对计数器进行操作的。</p>
+<p>修改代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">KGCorePlayerListener::KGCorePlayerListener( id&lt;KGCorePlayerListenerProtocol&gt; __attribute((ns_consumed)) manager)</span><br><span class="line">: mManager( manager )</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再测试一下，发现 retainCount 并没有变为 2 。<br><img src="../../../../images/retainCount2.png" alt=""></p>
+<blockquote>
+<p>When receiving such an argument, ARC releases the argument at the end of the function, subject to the usual optimizations for local values.</p>
+</blockquote>
+<p>关于 <code>__attribute((ns_consumed))</code> 这个属性，详细的参考 <a href="http://clang.llvm.org/docs/AutomaticReferenceCounting.html#consumed-parameters" target="_blank" rel="noopener">consumed-parameters</a> 和 <a href="http://clang-analyzer.llvm.org/annotations.html#attr_ns_consumed" target="_blank" rel="noopener">Attribute ‘ns_consumed’</a> 。</p>
+<p>使用这个属性还要考虑到 ARC 和非 ARC 下是否会有内存泄露的问题，<a href="http://clang-analyzer.llvm.org/annotations.html#attr_ns_consumed" target="_blank" rel="noopener">Example</a></p>
+<blockquote>
+<p><strong>Important note when using Garbage Collection:</strong> Note that the analyzer essentially ignores this attribute when code is compiled to use Objective-C garbage collection. This is because the release message does nothing when using GC. If the underlying function/method uses something like CFRelease to decrement the reference count, consider using the cf_consumed attribute instead.</p>
+</blockquote>
+<p>关于内存管理部分，Clang 定义了很多编译属性，如：</p>
+<blockquote>
+<p>#define NS_RETURNS_RETAINED <strong>attribute</strong>((ns_returns_retained))</p>
+<p>#define NS_RETURNS_NOT_RETAINED <strong>attribute</strong>((ns_returns_not_retained))</p>
+<p>#define NS_RETURNS_INNER_POINTER <strong>attribute</strong>((objc_returns_inner_pointer))</p>
+</blockquote>
+<p>更多的可以参照 <code>NSObjCRuntime.h</code> 头文件的定义。鉴于平时编码也很少需要用到 Clang 的编译属性，所以除非<code>特殊情况</code>，否则还是不要随便使用 Clang 的编译属性为好。</p>
+<p>参考链接：</p>
+<ul>
+<li><p><a href="http://clang.llvm.org/docs/AutomaticReferenceCounting.html" target="_blank" rel="noopener">Objective-C Automatic Reference Counting (ARC)</a></p>
+</li>
+<li><p><a href="http://clang-analyzer.llvm.org/annotations.html#attr_ns_consumed" target="_blank" rel="noopener">Attribute ‘ns_consumed’</a></p>
+</li>
+</ul>
+<p>拓展链接：</p>
+<ul>
+<li><p><a href="http://blog.sunnyxx.com/2014/03/15/objc_arc_secret/" target="_blank" rel="noopener">objc arc的简单探索</a></p>
+</li>
+<li><p><a href="https://blog.twitter.com/2014/attribute-directives-in-objective-c" target="_blank" rel="noopener"><strong>attribute</strong> directives in Objective-C</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/30/算法基础知识点复习笔记/" rel="next" title="算法基础知识点复习笔记">
+                <i class="fa fa-chevron-left"></i> 算法基础知识点复习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/15/栈/" rel="prev" title="栈">
+                栈 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
