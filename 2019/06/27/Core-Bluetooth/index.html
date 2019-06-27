@@ -100,12 +100,12 @@
 <meta property="og:site_name" content="朝元的博客">
 <meta property="og:description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote">
-<meta property="og:updated_time" content="2019-06-27T09:07:12.865Z">
+<meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
+<meta property="og:updated_time" content="2019-06-27T09:11:42.837Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core Bluetooth">
 <meta name="twitter:description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
-<meta name="twitter:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote">
+<meta name="twitter:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
 
 
 
@@ -320,7 +320,7 @@
 <p><code>CBperipheral</code> 是由一个或者多个<code>CBService</code>组成，CBService 又是由多个<code>CBCharacteristic</code>组成。</p>
 <p><code>CBCharacteristic</code> 是存放一些收集到的数据，<code>CBCentralManager</code> 可以对<code>CBCharacteristic</code> 的数据进行<strong>读写</strong>。</p>
 <p>每个<code>CBCharacteristic</code>存放不同的数据，比如心跳数据，地理位置数据。</p>
-<p><img src="../../../../images/TreeOfServicesAndCharacteristics_Remote" alt="H.264码流结构"></p>
+<p><img src="../../../../images/TreeOfServicesAndCharacteristics_Remote.png" alt="TreeOfServicesAndCharacteristics_Remote"></p>
 <h2 id="0x01-Starting-up-a-Central-Manager"><a href="#0x01-Starting-up-a-Central-Manager" class="headerlink" title="0x01 - Starting up a Central Manager"></a>0x01 - Starting up a Central Manager</h2><p>开始使用的时候需要先创建一<code>CBCentralManager</code>实例。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];</span><br></pre></td></tr></table></figure>
 <p>参数<code>nil</code> 则默认在主队列。</p>
