@@ -93,17 +93,19 @@
 
 
 
-<meta name="description" content="0x00 overview蓝牙主要分两部分：Central 和 Peripheral。 Central 主要负责发现和连接外设，Central 的主要类是 CBCentralManager； Peripheral 主要负责监测收集和发送数据给Central，Peripheral 的主要类是CBPeripheral。 CBperipheral 是由一个或者多个CBService组成，CBServic">
+<meta name="description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Core Bluetooth">
 <meta property="og:url" content="http://yoursite.com/2019/06/27/Core-Bluetooth/index.html">
 <meta property="og:site_name" content="朝元的博客">
-<meta property="og:description" content="0x00 overview蓝牙主要分两部分：Central 和 Peripheral。 Central 主要负责发现和连接外设，Central 的主要类是 CBCentralManager； Peripheral 主要负责监测收集和发送数据给Central，Peripheral 的主要类是CBPeripheral。 CBperipheral 是由一个或者多个CBService组成，CBServic">
+<meta property="og:description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-27T08:13:04.326Z">
+<meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote">
+<meta property="og:updated_time" content="2019-06-27T09:07:12.865Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core Bluetooth">
-<meta name="twitter:description" content="0x00 overview蓝牙主要分两部分：Central 和 Peripheral。 Central 主要负责发现和连接外设，Central 的主要类是 CBCentralManager； Peripheral 主要负责监测收集和发送数据给Central，Peripheral 的主要类是CBPeripheral。 CBperipheral 是由一个或者多个CBService组成，CBServic">
+<meta name="twitter:description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
+<meta name="twitter:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote">
 
 
 
@@ -311,28 +313,30 @@
       
 
       
-        <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 overview"></a>0x00 overview</h2><p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
+        <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 - overview"></a>0x00 - overview</h2><p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
+<a id="more"></a>
 <p><code>Central</code> 主要负责发现和连接外设，Central 的主要类是 <code>CBCentralManager</code>；</p>
 <p><code>Peripheral</code> 主要负责监测收集和发送数据给Central，Peripheral 的主要类是<code>CBPeripheral</code>。</p>
 <p><code>CBperipheral</code> 是由一个或者多个<code>CBService</code>组成，CBService 又是由多个<code>CBCharacteristic</code>组成。</p>
 <p><code>CBCharacteristic</code> 是存放一些收集到的数据，<code>CBCentralManager</code> 可以对<code>CBCharacteristic</code> 的数据进行<strong>读写</strong>。</p>
 <p>每个<code>CBCharacteristic</code>存放不同的数据，比如心跳数据，地理位置数据。</p>
-<h2 id="0x01-Starting-up-a-Central-Manager"><a href="#0x01-Starting-up-a-Central-Manager" class="headerlink" title="0x01 Starting up a Central Manager"></a>0x01 Starting up a Central Manager</h2><p>开始使用的时候需要先创建一<code>CBCentralManager</code>实例。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager =</span><br><span class="line">        [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];</span><br></pre></td></tr></table></figure>
+<p><img src="../../../../images/TreeOfServicesAndCharacteristics_Remote" alt="H.264码流结构"></p>
+<h2 id="0x01-Starting-up-a-Central-Manager"><a href="#0x01-Starting-up-a-Central-Manager" class="headerlink" title="0x01 - Starting up a Central Manager"></a>0x01 - Starting up a Central Manager</h2><p>开始使用的时候需要先创建一<code>CBCentralManager</code>实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];</span><br></pre></td></tr></table></figure>
 <p>参数<code>nil</code> 则默认在主队列。</p>
 <p>当创建完以上的实例的时候，Central 回去调用 delegate 的<code>centralManagerDidUpdateState:</code> 这个方法确认蓝牙是否被Central所支持。</p>
-<h2 id="0x02-scan"><a href="#0x02-scan" class="headerlink" title="0x02 scan"></a>0x02 scan</h2><p>之后便是去扫描周边的外设：</p>
+<h2 id="0x02-scan"><a href="#0x02-scan" class="headerlink" title="0x02 - scan"></a>0x02 - scan</h2><p>之后便是去扫描周边的外设：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[myCentralManager scanForPeripheralsWithServices:nil options:nil];</span><br></pre></td></tr></table></figure>
 <p>发现外设的话会通过delegate去告诉外面。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)centralManager:(CBCentralManager *)central</span><br><span class="line"> didDiscoverPeripheral:(CBPeripheral *)peripheral</span><br><span class="line">     advertisementData:(NSDictionary *)advertisementData</span><br><span class="line">                  RSSI:(NSNumber *)RSSI &#123;</span><br><span class="line"> </span><br><span class="line">    NSLog(@&quot;Discovered %@&quot;, peripheral.name);</span><br><span class="line">    self.discoveredPeripheral = peripheral;</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>查找到想要的外设的时候需要停止扫描。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[myCentralManager stopScan];</span><br></pre></td></tr></table></figure>
-<h2 id="0x03-Connecting-to-a-Peripheral"><a href="#0x03-Connecting-to-a-Peripheral" class="headerlink" title="0x03 Connecting to a Peripheral"></a>0x03 Connecting to a Peripheral</h2><p>开始连接外设，调用</p>
+<h2 id="0x03-Connecting-to-a-Peripheral"><a href="#0x03-Connecting-to-a-Peripheral" class="headerlink" title="0x03 - Connecting to a Peripheral"></a>0x03 - Connecting to a Peripheral</h2><p>开始连接外设，调用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[myCentralManager connectPeripheral:peripheral options:nil];</span><br></pre></td></tr></table></figure>
 <p>这个函数。</p>
 <p>连接成功会通过<code>centralManager:didConnectPeripheral:</code> 这个delegate方法告诉代理。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)centralManager:(CBCentralManager *)central</span><br><span class="line">  didConnectPeripheral:(CBPeripheral *)peripheral &#123;</span><br><span class="line"> </span><br><span class="line">    NSLog(@&quot;Peripheral connected&quot;);</span><br><span class="line">    peripheral.delegate = self;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<h2 id="0x04-通信"><a href="#0x04-通信" class="headerlink" title="0x04 通信"></a>0x04 通信</h2><h3 id="1-获取CBService"><a href="#1-获取CBService" class="headerlink" title="1. 获取CBService"></a>1. 获取CBService</h3><p>接下来就是要获取数据了。</p>
+<h2 id="0x04-通信"><a href="#0x04-通信" class="headerlink" title="0x04 - 通信"></a>0x04 - 通信</h2><h3 id="1-获取CBService"><a href="#1-获取CBService" class="headerlink" title="1. 获取CBService"></a>1. 获取CBService</h3><p>接下来就是要获取数据了。</p>
 <p>还记得 0x00 小节说过的<code>CBPeripheral</code>的结构么？要访问数据得先访问到<code>CBService</code> 然后再到<code>CBCharacteristic</code>。</p>
 <p>通过过<code>[peripheral discoverServices:nil];</code> 这个可以访问到CBPeripheral所有的Service。</p>
 <p><strong>Note:</strong>在实际开发中，这里的参数不能传<code>nil</code>，应该指定你要的UIIDs Service，以确保不会耗费不必要的电量和时间。</p>
@@ -396,8 +400,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/08/test2/" rel="next" title="test2">
-                <i class="fa fa-chevron-left"></i> test2
+              <a href="/2018/10/08/work-on-personal-pc-test/" rel="next" title="work on personal pc test">
+                <i class="fa fa-chevron-left"></i> work on personal pc test
               </a>
             
           </div>
@@ -476,7 +480,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -533,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-overview"><span class="nav-number">1.</span> <span class="nav-text">0x00 overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Starting-up-a-Central-Manager"><span class="nav-number">2.</span> <span class="nav-text">0x01 Starting up a Central Manager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-scan"><span class="nav-number">3.</span> <span class="nav-text">0x02 scan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Connecting-to-a-Peripheral"><span class="nav-number">4.</span> <span class="nav-text">0x03 Connecting to a Peripheral</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-通信"><span class="nav-number">5.</span> <span class="nav-text">0x04 通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取CBService"><span class="nav-number">5.1.</span> <span class="nav-text">1. 获取CBService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取CBCharacteristic"><span class="nav-number">5.2.</span> <span class="nav-text">2. 获取CBCharacteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Retrieving-the-value-of-Characteristic"><span class="nav-number">5.3.</span> <span class="nav-text">3. Retrieving the value of Characteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Subscribing-to-a-Characteristic’s-Value"><span class="nav-number">5.4.</span> <span class="nav-text">4. Subscribing to a Characteristic’s Value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Write-the-Value-of-a-Characteristic"><span class="nav-number">5.5.</span> <span class="nav-text">5. Write the Value of a Characteristic</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-overview"><span class="nav-number">1.</span> <span class="nav-text">0x00 - overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Starting-up-a-Central-Manager"><span class="nav-number">2.</span> <span class="nav-text">0x01 - Starting up a Central Manager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-scan"><span class="nav-number">3.</span> <span class="nav-text">0x02 - scan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Connecting-to-a-Peripheral"><span class="nav-number">4.</span> <span class="nav-text">0x03 - Connecting to a Peripheral</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-通信"><span class="nav-number">5.</span> <span class="nav-text">0x04 - 通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取CBService"><span class="nav-number">5.1.</span> <span class="nav-text">1. 获取CBService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取CBCharacteristic"><span class="nav-number">5.2.</span> <span class="nav-text">2. 获取CBCharacteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Retrieving-the-value-of-Characteristic"><span class="nav-number">5.3.</span> <span class="nav-text">3. Retrieving the value of Characteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Subscribing-to-a-Characteristic’s-Value"><span class="nav-number">5.4.</span> <span class="nav-text">4. Subscribing to a Characteristic’s Value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Write-the-Value-of-a-Characteristic"><span class="nav-number">5.5.</span> <span class="nav-text">5. Write the Value of a Characteristic</span></a></li></ol></li></ol></div>
             
 
           </div>
