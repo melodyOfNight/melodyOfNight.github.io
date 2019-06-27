@@ -93,20 +93,17 @@
 
 
 
-<meta name="description" content="NAL 简介NAL 全称 Network Abstract Layer, 即网络抽象层。在H.264/AVC 视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL），其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL">
+<meta name="description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。 0x01 - Foreground-Only Apps有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。 CBCentralManager在调用connec">
 <meta property="og:type" content="article">
-<meta property="og:title" content="H.264 的 NAL 单元及码流结构">
-<meta property="og:url" content="http://yoursite.com/2017/07/16/H.264 的 NAL 单元及码流结构/index.html">
+<meta property="og:title" content="Core Bluetooth - Background Procesing">
+<meta property="og:url" content="http://yoursite.com/2019/06/27/Core-Bluetooth-Background-Procesing/index.html">
 <meta property="og:site_name" content="朝元的博客">
-<meta property="og:description" content="NAL 简介NAL 全称 Network Abstract Layer, 即网络抽象层。在H.264/AVC 视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL），其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL">
+<meta property="og:description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。 0x01 - Foreground-Only Apps有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。 CBCentralManager在调用connec">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/H.264码流结构">
-<meta property="og:image" content="http://yoursite.com/images/NAL单元解码的流程">
-<meta property="og:updated_time" content="2017-07-30T09:49:26.000Z">
+<meta property="og:updated_time" content="2019-06-27T14:42:41.729Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="H.264 的 NAL 单元及码流结构">
-<meta name="twitter:description" content="NAL 简介NAL 全称 Network Abstract Layer, 即网络抽象层。在H.264/AVC 视频编码标准中，整个系统框架被分为了两个层面：视频编码层面（VCL）和网络抽象层面（NAL），其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL">
-<meta name="twitter:image" content="http://yoursite.com/images/H.264码流结构">
+<meta name="twitter:title" content="Core Bluetooth - Background Procesing">
+<meta name="twitter:description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。 0x01 - Foreground-Only Apps有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。 CBCentralManager在调用connec">
 
 
 
@@ -134,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/16/H.264 的 NAL 单元及码流结构/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/27/Core-Bluetooth-Background-Procesing/"/>
 
 
 
 
 
-  <title>H.264 的 NAL 单元及码流结构 | 朝元的博客</title>
+  <title>Core Bluetooth - Background Procesing | 朝元的博客</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -250,7 +247,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/16/H.264 的 NAL 单元及码流结构/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/27/Core-Bluetooth-Background-Procesing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="朝元">
@@ -267,7 +264,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">H.264 的 NAL 单元及码流结构</h1>
+          <h1 class="post-title" itemprop="name headline">Core Bluetooth - Background Procesing</h1>
         
 
         <div class="post-meta">
@@ -279,8 +276,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T15:58:55+08:00">
-                2017-07-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-27T21:04:23+08:00">
+                2019-06-27
               </time>
             
 
@@ -314,129 +311,34 @@
       
 
       
-        <h1 id="NAL-简介"><a href="#NAL-简介" class="headerlink" title="NAL 简介"></a>NAL 简介</h1><p><code>NAL</code> 全称 Network Abstract Layer, 即网络抽象层。在<code>H.264/AVC</code> 视频编码标准中，整个系统框架被分为了两个层面：<code>视频编码层面（VCL）</code>和<code>网络抽象层面（NAL）</code>，其中，前者负责有效表示视频数据的内容，而后者负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输。NAL 单元是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL 的称为原始字节序列荷载（RBSP）的字节流。</p>
-<a id="more"></a>
-<p><code>NAL单元</code>是 NAL 的基本语法结构，它包含一个字节的头信息和一系列来自 VCL 的称为原始字节序列载荷（RBSP）的字节流。头信息中包含着一个可否丢弃的指示标记，标识着该 NAL 单元的丢弃能否引起错误扩散，一般，如果 NAL 单元中的信息不用于构建参考图像，则认为可以将其丢弃；最后包含的是 NAL 单元的类型信息，暗示着其内含有效载荷的内容。在 RBSP 的最后包含一个 比特 1 若干比特 0，以便字节对齐。</p>
-<p>H.264 的编码视频序列包括一系列的 NAL 单元,每个 NAL 单元包含一个 RBSP。编码片(包括数据分割片 IDR 片)和序列 RBSP 结束符被定义为 VCL NAL 单元,其余为 NAL 单元。</p>
-<p>典型的 RBSP 单元序列。每个单元都按独立的 NAL 单元传送。NAL单元的类型如下表所示</p>
-<table>
-<thead>
-<tr>
-<th>NAL Type</th>
-<th>Description</th>
-<th>VCL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>未规定</td>
-<td>N/A</td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td>非 DIR 图像中不采用数据划分 Slice</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>非 DIR 图像中 A 类数据划分 Slice</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>非 DIR 图像中 B 类数据划分 Slice</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td>非 DIR 图像中 C 类数据划分 Slice</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td>IDR 图像的 Slice,Coded Video Sequence 的 Access Unit</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>补充增强信息（SEI）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>7</td>
-<td>序列参数集（SPS）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td>图像参数集（PPS）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>9</td>
-<td>分割符（Access Unit Delimiter）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>10</td>
-<td>序列结束符（End of Sequence）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>11</td>
-<td>流结束符（End of Stream）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>12</td>
-<td>填充数据（Filler）</td>
-<td>NO</td>
-<td></td>
-</tr>
-<tr>
-<td>13</td>
-<td>保留</td>
-<td>N/A</td>
-<td></td>
-</tr>
-<tr>
-<td>14</td>
-<td>未规定</td>
-<td>N/A</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h1 id="H-264-码流结构"><a href="#H-264-码流结构" class="headerlink" title="H.264 码流结构"></a>H.264 码流结构</h1><p>H.264 的码流结构如下图所示：</p>
-<p><img src="../../../../images/H.264码流结构" alt="H.264码流结构"></p>
-<p><strong>Annexb格式：</strong> NALU数据+起始码，如果 NALU 对应的 Slice 为一帧的开始,则用 <code>4</code> 字节表示,即 <code>0x00000001</code>；否则用 <code>3</code> 字节表示,<code>0x000001</code>。</p>
-<blockquote>
-<p>解惑：一个字节是由几个16进制的位组成? </p>
-<p>两个16进制数!</p>
-<p>一个字节八个比特,就是八个二进制位</p>
-<p>四个二进制数最大表示为15,就是一个16进制数,所以八位可以表示成两个16进制的数!</p>
-</blockquote>
-<p><strong>RTP格式：</strong> NALU 数据 + RTP 协议的 RTP 头数据。</p>
-<p><strong>NAL Header：</strong> <code>forbidden_bit</code>,<code>nal_reference_bit(优先级)</code>,<code>nal_unit_type(类型)</code>。</p>
-<p><strong>脱壳操作：</strong> 为了使 NALU 主体不包括起始码,在编码时每遇到两个字节(连续)的0，就插入一字节 <code>0x03</code>，以和起始码相区别。解码时,则将相应的 0x03 删除掉</p>
-<h1 id="H-264解码"><a href="#H-264解码" class="headerlink" title="H.264解码"></a>H.264解码</h1><p>NAL 头信息的 nal_referrence_idc(NRI)用于在重建过程中标记一个 NAL 单元的重要性，值为 0 表示这个 NAL 单元没有用预测，因此可以被解码器抛弃而不会有错误扩散；值高于 0 表示 NAL 单元要用于无漂移重构，且值越高，对此 NAL 单元丢失的影响越大。</p>
-<p>NAL 头信息的隐藏比特位，在 H.264 编码器中默认为 0,当网络识别到单元中存在比特错误时，可将其置为 1。隐藏比特位主要用于适应不同种类的网络环境(比如有线无线相结合的环境)。</p>
-<p>NAL 单元解码的流程为：首先从 NAL 单元中提取出 RBSP 语法结构，然后按照下图所示的流程处理 RBSP 语法结构。输入的是 NAL 单元，输出结果是经过解码的当前图像的样值点。</p>
-<p><img src="../../../../images/NAL单元解码的流程" alt="NAL单元解码的流程"></p>
-<p>NAL 单元中分别包含了序列参数集和图像参数集。图像参数集和序列参数集在其他NAL 单元传输过程中作为参考使用,在这些数据 NAL 单元的片头中，通过语法元素 pic_parameter_set_id 设置它们所使用的图像参数集编号；而相应的每个图像参数集中，通过语法元素 seq_paramter_set_id 设置他们使用的序列参数集编号。</p>
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 - 前言"></a>0x00 - 前言</h2><p>对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。</p>
+<h2 id="0x01-Foreground-Only-Apps"><a href="#0x01-Foreground-Only-Apps" class="headerlink" title="0x01 - Foreground-Only Apps"></a>0x01 - Foreground-Only Apps</h2><p>有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。</p>
+<p><code>CBCentralManager</code>在调用<code>connectPeripheral:options:</code>的时候，option 可以设置为一下几种：</p>
+<ul>
+<li>CBConnectPeripheralOptionNotifyOnConnectionKey 蓝牙连接的时候弹窗提醒</li>
+<li>CBConnectPeripheralOptionNotifyOnDisconnectionKey 蓝牙断开的时候弹窗提醒</li>
+<li>CBConnectPeripheralOptionNotifyOnNotificationKey 接到任何通知的时候弹窗提醒</li>
+</ul>
+<h2 id="0x02-后台模式"><a href="#0x02-后台模式" class="headerlink" title="0x02 - 后台模式"></a>0x02 - 后台模式</h2><p> <code>Info.plist</code> 添加 <code>UIBackgroundModes</code> key，值为<code>bluetooth-central</code>或者<code>bluetooth-peripheral</code>，看场景区分使用</p>
+<p>对于一些需要常驻后台的app，系统提供了保存和恢复现场的方式让你的app“常驻”。具体需要实现以下4步：（前3步require，后1步option）</p>
+<p><strong>1、Opt In to State Preservation and Restoration</strong><br>初始化<code>CBCentralManager</code>或者<code>CBPeripheralManager</code>实例的时候指定 option key <code>CBCentralManagerOptionRestoreIdentifierKey</code>。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager =</span><br><span class="line">        [[CBCentralManager alloc] initWithDelegate:self queue:nil</span><br><span class="line">         options:@&#123; CBCentralManagerOptionRestoreIdentifierKey:</span><br><span class="line">         @&quot;myCentralManagerIdentifier&quot; &#125;];</span><br></pre></td></tr></table></figure>
+<p><strong>Note:</strong> 因为<code>CBCentralManager</code> 和 <code>CBPeripheralManager</code>可以有多个，在指定 option key 的时候需要确保 key 的唯一性。</p>
+<p><strong>2、Reinstantiate Your Central and Peripheral Managers</strong><br>当你的App在后台被系统重新启动的时候，需要重新去初始化central和peripheral。这就需要你第一步指定的<code>CBCentralManagerOptionRestoreIdentifierKey</code>去初始化。如果你只有一个central和一个peripheral的话，这一步系统会帮你做好了，你无需关心。</p>
+<p>如果你有多个central和peripheral的话，这就需要你自己选择相应的<code>CBCentralManagerOptionRestoreIdentifierKey</code>去重新初始化central和peripheral。</p>
+<p>具体如下，系统在重新启动你的app的时候会调用<code>application: didFinishLaunchingWithOptions:</code>，在这函数里面可以通过<code>launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey]</code>拿到所有的 IdentifierKey ，然后就可以去 Reinstantiate 了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application</span><br><span class="line">didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</span><br><span class="line"> </span><br><span class="line">    NSArray *centralManagerIdentifiers =</span><br><span class="line">        launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey];</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p><strong>3、Implement the Appropriate Restoration Delegate Method</strong></p>
+<p>central 需要实现<code>centralManager:willRestoreState:</code> delegate<br>peripheral 需要实现<code>peripheralManager:willRestoreState:</code></p>
+<p>example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)centralManager:(CBCentralManager *)central</span><br><span class="line">      willRestoreState:(NSDictionary *)state &#123;</span><br><span class="line"> </span><br><span class="line">    NSArray *peripherals =</span><br><span class="line">        state[CBCentralManagerRestoredStatePeripheralsKey];</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p><strong>4、 Update Your Initialization Process</strong></p>
+<p>这一步主要是为了让你了解到重新初始进程是否顺畅，是否从之前中断的地方重新开始了~</p>
+<p>例如，当在<code>centralManagerDidUpdateState:</code> 中初始化你的app的时候，你可以通过以下代码确定是否成功恢复到退出之前 peripheral 查找指定service的场景。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NSUInteger serviceUUIDIndex =</span><br><span class="line">        [peripheral.services indexOfObjectPassingTest:^BOOL(CBService *obj,</span><br><span class="line">        NSUInteger index, BOOL *stop) &#123;</span><br><span class="line">            return [obj.UUID isEqual:myServiceUUIDString];</span><br><span class="line">        &#125;];</span><br><span class="line"> </span><br><span class="line">    if (serviceUUIDIndex == NSNotFound) &#123;</span><br><span class="line">        [peripheral discoverServices:@[myServiceUUIDString]];</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>正如以上代码所展示的，如果系统在你查找服务的时候终止了你的程序。在调用<code>discoverServices:</code>探索存储的peripheral数据之前，如果你的app成功查找到了service，你就可以去检查是否有合适的 characteristics被查找到了，这样你就可以知道自己是否在正确的时间调用了正确的方法了。</p>
+<p>参考：</p>
+<p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html#//apple_ref/doc/uid/TP40013257-CH7-SW1" target="_blank" rel="noopener">Core Bluetooth Background Processing for iOS Apps</a></p>
 
       
     </div>
@@ -473,8 +375,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/12/iOS高级调试-逆向技术-汇编寄存器调用/" rel="next" title="iOS高级调试&逆向技术-汇编寄存器调用">
-                <i class="fa fa-chevron-left"></i> iOS高级调试&逆向技术-汇编寄存器调用
+              <a href="/2019/06/27/Core-Bluetooth-2/" rel="next" title="Core-Bluetooth(2)">
+                <i class="fa fa-chevron-left"></i> Core-Bluetooth(2)
               </a>
             
           </div>
@@ -482,10 +384,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/30/iOS日志查看/" rel="prev" title="iOS日志查看">
-                iOS日志查看 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -614,7 +512,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NAL-简介"><span class="nav-number">1.</span> <span class="nav-text">NAL 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#H-264-码流结构"><span class="nav-number">2.</span> <span class="nav-text">H.264 码流结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#H-264解码"><span class="nav-number">3.</span> <span class="nav-text">H.264解码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 - 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Foreground-Only-Apps"><span class="nav-number">2.</span> <span class="nav-text">0x01 - Foreground-Only Apps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-后台模式"><span class="nav-number">3.</span> <span class="nav-text">0x02 - 后台模式</span></a></li></ol></div>
             
 
           </div>
