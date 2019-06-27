@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="朝元的博客">
 <meta property="og:description" content="这一节讲讲外接设备(Peripheral)，主要是关于CBPeripheralManager这个类的使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-27T10:45:11.727Z">
+<meta property="og:updated_time" content="2019-06-27T12:46:04.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core-Bluetooth(2)">
 <meta name="twitter:description" content="这一节讲讲外接设备(Peripheral)，主要是关于CBPeripheralManager这个类的使用。">
@@ -313,13 +313,11 @@
       
         <p>这一节讲讲<code>外接设备(Peripheral)</code>，主要是关于<code>CBPeripheralManager</code>这个类的使用。</p>
 <a id="more"></a>
-<p>##0x00 - Starting Up a Peripheral Manager</p>
-<p>首先，初始化一个<code>CBPeripheralManager</code>实例。</p>
+<h2 id="0x00-Starting-Up-a-Peripheral-Manager"><a href="#0x00-Starting-Up-a-Peripheral-Manager" class="headerlink" title="0x00 - Starting Up a Peripheral Manager"></a>0x00 - Starting Up a Peripheral Manager</h2><p>首先，初始化一个<code>CBPeripheralManager</code>实例。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myPeripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];</span><br></pre></td></tr></table></figure>
 <p>同样的，这里的queue参数设置为<code>nil</code>表示默认使用主队列。</p>
 <p>但你创建完一个 myPeripheralManager 实例的时候，peripheral manager 就会调用它的代理函数<code>peripheralManagerDidUpdateState:</code>，这边必须实现该函数以确保本地外设支持该蓝牙。</p>
-<p>##0x01 - Setting up Your Services and Characteristics</p>
-<p><a href="https://melodyofnight.github.io/2019/06/27/Core-Bluetooth/" target="_blank" rel="noopener">Core Bluetooth</a>这一节说过，<code>Peripheral</code>是由<code>CBService</code>,<code>CBCharacteristic</code>组成的，所以我们这边得先创建CBService和CBCharacteristic。</p>
+<h2 id="0x01-Setting-up-Your-Services-and-Characteristics"><a href="#0x01-Setting-up-Your-Services-and-Characteristics" class="headerlink" title="0x01 - Setting up Your Services and Characteristics"></a>0x01 - Setting up Your Services and Characteristics</h2><p><a href="https://melodyofnight.github.io/2019/06/27/Core-Bluetooth/" target="_blank" rel="noopener">Core Bluetooth</a>这一节说过，<code>Peripheral</code>是由<code>CBService</code>,<code>CBCharacteristic</code>组成的，所以我们这边得先创建CBService和CBCharacteristic。</p>
 <p>services 和 characteristics 都是由128-bit的UUIDs唯一指定的。例如<code>0000180D-0000-1000-8000-00805F9B34FB</code> ，在开发的过程中<code>CBUUID</code>提供了一个<code>UUIDWithString</code>方法，可以使用简短的字符串生成128-bit的UUIDs。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CBUUID *heartRateServiceUUID = [CBUUID UUIDWithString: @&quot;180D&quot;];</span><br></pre></td></tr></table></figure>
 <p>对于一些没有预设UUIDs的services和Characteristics，你也可以通过命令行<code>uuidgen</code>生成，然后用这个UUID实例化一个CBUUID</p>
@@ -330,21 +328,18 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">myCharacteristic =</span><br><span class="line">        [[CBMutableCharacteristic alloc] initWithType:myCharacteristicUUID</span><br><span class="line">         properties:CBCharacteristicPropertyRead</span><br><span class="line">         value:myValue permissions:CBAttributePermissionsReadable];</span><br></pre></td></tr></table></figure>
 <p>接着把characteristics设置给services</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myService.characteristics = @[myCharacteristic];</span><br></pre></td></tr></table></figure>
-<p>##0x02 - Publishing Your Services and Characteristics</p>
-<p>最后add到peripheral上</p>
+<h2 id="0x02-Publishing-Your-Services-and-Characteristics"><a href="#0x02-Publishing-Your-Services-and-Characteristics" class="headerlink" title="0x02 - Publishing Your Services and Characteristics"></a>0x02 - Publishing Your Services and Characteristics</h2><p>最后add到peripheral上</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[myPeripheralManager addService:myService];</span><br></pre></td></tr></table></figure>
 <p>当你把service加进来的时候，peripheral 就相当于发布了服务了，这时候会调用delegate的<code>peripheralManager:didAddService:error:</code>方法，如果发布不成功的话在这里就可以获取到相关的错误原因了。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral</span><br><span class="line">            didAddService:(CBService *)service</span><br><span class="line">                    error:(NSError *)error &#123;</span><br><span class="line"> </span><br><span class="line">    if (error) &#123;</span><br><span class="line">        NSLog(@&quot;Error publishing service: %@&quot;, [error localizedDescription]);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 <p><strong>Note:</strong> 一旦你发布了服务的时候，services就会被cache起来并且不可再修改！</p>
-<p>##0x03 - Advertising Your Services</p>
-<p>当你发布了服务的时候接下来就需要向Central进行广播了，开始广播可以调用<code>startAdvertising:</code>这个方法</p>
+<h2 id="0x03-Advertising-Your-Services"><a href="#0x03-Advertising-Your-Services" class="headerlink" title="0x03 - Advertising Your Services"></a>0x03 - Advertising Your Services</h2><p>当你发布了服务的时候接下来就需要向Central进行广播了，开始广播可以调用<code>startAdvertising:</code>这个方法</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[myPeripheralManager startAdvertising:@&#123; CBAdvertisementDataServiceUUIDsKey :</span><br><span class="line">        @[myFirstService.UUID, mySecondService.UUID] &#125;];</span><br></pre></td></tr></table></figure>
 <p>这里的UUIDsKey指定你要对外广播的servers。目前，这里只提供了2种key可以填写，<code>CBAdvertisementDataLocalNameKey</code> 和 <code>CBAdvertisementDataServiceUUIDsKey</code>。</p>
 <p>当开始对外广播的时候，peripheral 就会调用delegate的<code>peripheralManagerDidStartAdvertising:error:</code>这个方法，一旦广播出错便可以在这里捕获到。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral</span><br><span class="line">                                       error:(NSError *)error &#123;</span><br><span class="line"> </span><br><span class="line">    if (error) &#123;</span><br><span class="line">        NSLog(@&quot;Error advertising: %@&quot;, [error localizedDescription]);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 <p>开启对外广播的时候，周边的centrals就可以发现并和你建立连接</p>
-<p>##0x04 - Responding to Read and Write Request form a Central</p>
-<p>建立起连接之后，</p>
+<h2 id="0x04-Responding-to-Read-and-Write-Request-form-a-Central"><a href="#0x04-Responding-to-Read-and-Write-Request-form-a-Central" class="headerlink" title="0x04 - Responding to Read and Write Request form a Central"></a>0x04 - Responding to Read and Write Request form a Central</h2><p>建立起连接之后，</p>
 <h3 id="Read"><a href="#Read" class="headerlink" title="Read"></a>Read</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral</span><br><span class="line">    didReceiveReadRequest:(CBATTRequest *)request &#123;</span><br><span class="line"> </span><br><span class="line">    if ([request.characteristic.UUID isEqual:myCharacteristic.UUID]) &#123;</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
 <p>接收到请求的第一步便是验证请求的characteristic UUID 是否在外设的数据库里面。</p>
 <p>检查通过以后再对请求读取的数据字段做越界检查。</p>
@@ -360,8 +355,7 @@
 <p>最后返回响应写请求的结果</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[myPeripheralManager respondToRequest:[requests objectAtIndex:0]</span><br><span class="line">        withResult:CBATTErrorSuccess];</span><br></pre></td></tr></table></figure>
 <p><strong>Note:</strong> 同样的，<code>peripheralManager:didReceiveWriteRequests:</code>和<code>respondToRequest:withResult:</code>是成对出现的。</p>
-<p>##0x05 - Sending Updated Characteristic Values to Subscribed Centrals</p>
-<p>通常，已经连接了的centrals会订阅一个或者多个characteristic的值，当有订阅的时候会调用这个回调函数</p>
+<h2 id="0x05-Sending-Updated-Characteristic-Values-to-Subscribed-Centrals"><a href="#0x05-Sending-Updated-Characteristic-Values-to-Subscribed-Centrals" class="headerlink" title="0x05 - Sending Updated Characteristic Values to Subscribed Centrals"></a>0x05 - Sending Updated Characteristic Values to Subscribed Centrals</h2><p>通常，已经连接了的centrals会订阅一个或者多个characteristic的值，当有订阅的时候会调用这个回调函数</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral</span><br><span class="line">                  central:(CBCentral *)central</span><br><span class="line">didSubscribeToCharacteristic:(CBCharacteristic *)characteristic &#123;</span><br><span class="line"> </span><br><span class="line">    NSLog(@&quot;Central subscribed to characteristic %@&quot;, characteristic);</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 <p>之后通过调用<code>updateValue:forCharacteristic:onSubscribedCentrals:</code>这个方法向订阅者通知值的更新</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSData *updatedValue = // fetch the characteristic&apos;s new value</span><br><span class="line">    BOOL didSendValue = [myPeripheralManager updateValue:updatedValue</span><br><span class="line">        forCharacteristic:characteristic onSubscribedCentrals:nil];</span><br></pre></td></tr></table></figure>
@@ -540,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Read"><span class="nav-number">1.</span> <span class="nav-text">Read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write"><span class="nav-number">2.</span> <span class="nav-text">Write</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-Starting-Up-a-Peripheral-Manager"><span class="nav-number">1.</span> <span class="nav-text">0x00 - Starting Up a Peripheral Manager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Setting-up-Your-Services-and-Characteristics"><span class="nav-number">2.</span> <span class="nav-text">0x01 - Setting up Your Services and Characteristics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-Publishing-Your-Services-and-Characteristics"><span class="nav-number">3.</span> <span class="nav-text">0x02 - Publishing Your Services and Characteristics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Advertising-Your-Services"><span class="nav-number">4.</span> <span class="nav-text">0x03 - Advertising Your Services</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-Responding-to-Read-and-Write-Request-form-a-Central"><span class="nav-number">5.</span> <span class="nav-text">0x04 - Responding to Read and Write Request form a Central</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Read"><span class="nav-number">5.1.</span> <span class="nav-text">Read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write"><span class="nav-number">5.2.</span> <span class="nav-text">Write</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-Sending-Updated-Characteristic-Values-to-Subscribed-Centrals"><span class="nav-number">6.</span> <span class="nav-text">0x05 - Sending Updated Characteristic Values to Subscribed Centrals</span></a></li></ol></div>
             
 
           </div>
