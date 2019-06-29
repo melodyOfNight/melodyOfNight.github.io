@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="朝元的博客">
 <meta property="og:description" content="这一节讲讲外接设备(Peripheral)，主要是关于CBPeripheralManager这个类的使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-27T12:46:04.230Z">
+<meta property="og:updated_time" content="2019-06-29T07:13:46.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core-Bluetooth(2)">
 <meta name="twitter:description" content="这一节讲讲外接设备(Peripheral)，主要是关于CBPeripheralManager这个类的使用。">
@@ -361,6 +361,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSData *updatedValue = // fetch the characteristic&apos;s new value</span><br><span class="line">    BOOL didSendValue = [myPeripheralManager updateValue:updatedValue</span><br><span class="line">        forCharacteristic:characteristic onSubscribedCentrals:nil];</span><br></pre></td></tr></table></figure>
 <p>这里的最后一个参数置为<code>nil</code>表示有链接到或者订阅的central就可以收到消息，其他的则被忽略。</p>
 <p>另外，更新完成之后想要知道消息是否已经正确发送到订阅者那里了，可以通过<code>updateValue:forCharacteristic:onSubscribedCentrals:</code>来确定，如果传送队列没有空间进行发送消息了，则会返回NO，此时可以调用<code>peripheralManagerIsReadyToUpdateSubscribers:</code>这个方法做延时发送，当队列有空余空间的时候则会继续开始发送</p>
+<p>拓展链接：</p>
+<p><a href="http://liuyanwei.jumppo.com/2015/08/14/ios-BLE-2.html" target="_blank" rel="noopener">ios蓝牙开发（二）ios连接外设的代码实现</a></p>
+<p><a href="http://liuyanwei.jumppo.com/2015/09/07/ios-BLE-3.html" target="_blank" rel="noopener">ios蓝牙开发（三）app作为外设被连接的实现</a></p>
 
       
     </div>

@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。 0x01 - Foreground-Only Apps有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。 CBCentralManager在调用connec">
+<meta name="description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Core Bluetooth - Background Procesing">
 <meta property="og:url" content="http://yoursite.com/2019/06/27/Core-Bluetooth-Background-Procesing/index.html">
 <meta property="og:site_name" content="朝元的博客">
-<meta property="og:description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。 0x01 - Foreground-Only Apps有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。 CBCentralManager在调用connec">
+<meta property="og:description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-27T14:42:41.729Z">
+<meta property="og:updated_time" content="2019-06-28T01:10:52.155Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core Bluetooth - Background Procesing">
-<meta name="twitter:description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。 0x01 - Foreground-Only Apps有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。 CBCentralManager在调用connec">
+<meta name="twitter:description" content="0x00 - 前言对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。">
 
 
 
@@ -312,6 +312,7 @@
 
       
         <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 - 前言"></a>0x00 - 前言</h2><p>对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。</p>
+<a id="more"></a>
 <h2 id="0x01-Foreground-Only-Apps"><a href="#0x01-Foreground-Only-Apps" class="headerlink" title="0x01 - Foreground-Only Apps"></a>0x01 - Foreground-Only Apps</h2><p>有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。</p>
 <p><code>CBCentralManager</code>在调用<code>connectPeripheral:options:</code>的时候，option 可以设置为一下几种：</p>
 <ul>

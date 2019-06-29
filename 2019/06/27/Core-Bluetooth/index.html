@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
+<meta name="description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE peripheral,central: 外设和中心,发起连接的时central，被连接的设备为perilheral service and characteris">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Core Bluetooth">
 <meta property="og:url" content="http://yoursite.com/2019/06/27/Core-Bluetooth/index.html">
 <meta property="og:site_name" content="朝元的博客">
-<meta property="og:description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
+<meta property="og:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE peripheral,central: 外设和中心,发起连接的时central，被连接的设备为perilheral service and characteris">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
-<meta property="og:updated_time" content="2019-06-27T09:11:42.837Z">
+<meta property="og:updated_time" content="2019-06-29T07:10:43.313Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core Bluetooth">
-<meta name="twitter:description" content="0x00 - overview蓝牙主要分两部分：Central 和 Peripheral。">
+<meta name="twitter:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE peripheral,central: 外设和中心,发起连接的时central，被连接的设备为perilheral service and characteris">
 <meta name="twitter:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
 
 
@@ -313,7 +313,16 @@
       
 
       
-        <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 - overview"></a>0x00 - overview</h2><p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
+        <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 - overview"></a>0x00 - overview</h2><p><strong>常见名称和缩写</strong></p>
+<p><code>MFI</code><strong>:</strong> make for ipad ,iphone, itouch 专们为苹果设备制作的设备</p>
+<p><code>BLE</code><strong>:</strong> buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE</p>
+<p><code>peripheral</code>,<code>central</code><strong>:</strong> 外设和中心,发起连接的时central，被连接的设备为perilheral</p>
+<p><code>service</code> and <code>characteristic</code> <strong>:</strong> 服务和特征 每个设备会提供服务和特征，类似于服务端的api，但是机构不同。每个外设会有很多服务，每个服务中包含很多字段，这些字段的权限一般分为 读read，写write，通知notiy几种，就是我们连接设备后具体需要操作的内容。</p>
+<p>Description 每个characteristic可以对应一个或多个Description用户描述characteristic的信息或属性</p>
+<p><code>MFI</code> 开发使用ExternalAccessory 框架</p>
+<p><code>4.0 BLE</code> 开发使用CoreBluetooth 框架</p>
+<hr>
+<p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
 <a id="more"></a>
 <p><code>Central</code> 主要负责发现和连接外设，Central 的主要类是 <code>CBCentralManager</code>；</p>
 <p><code>Peripheral</code> 主要负责监测收集和发送数据给Central，Peripheral 的主要类是<code>CBPeripheral</code>。</p>
@@ -361,6 +370,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[peripheral writeValue:dataToWrite forCharacteristic:interestingCharacteristic</span><br><span class="line">        type:CBCharacteristicWriteWithResponse];</span><br></pre></td></tr></table></figure>
 <p>写入成功与否的回调是这个</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheral:(CBPeripheral *)peripheral</span><br><span class="line">didWriteValueForCharacteristic:(CBCharacteristic *)characteristic</span><br><span class="line">             error:(NSError *)error &#123;</span><br><span class="line"> </span><br><span class="line">    if (error) &#123;</span><br><span class="line">        NSLog(@&quot;Error writing characteristic value: %@&quot;,</span><br><span class="line">            [error localizedDescription]);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<h3 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h3><p><strong>蓝牙中心模式流程</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. 建立中心角色</span><br><span class="line">2. 扫描外设（discover）</span><br><span class="line">3. 连接外设(connect)</span><br><span class="line">4. 扫描外设中的服务和特征(discover)</span><br><span class="line">    - 4.1 获取外设的services</span><br><span class="line">    - 4.2 获取外设的Characteristics,获取Characteristics的值，获取Characteristics的Descriptor和Descriptor的值</span><br><span class="line">5. 与外设做数据交互(explore and interact)</span><br><span class="line">6. 订阅Characteristic的通知</span><br><span class="line">7. 断开连接(disconnect)</span><br></pre></td></tr></table></figure>
+<p><strong>蓝牙外设模式流程</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 启动一个Peripheral管理对象</span><br><span class="line">2. 本地Peripheral设置服务,特性,描述，权限等等</span><br><span class="line">3. Peripheral发送广播</span><br><span class="line">4. 设置处理订阅、取消订阅、读characteristic、写characteristic的委托方法</span><br></pre></td></tr></table></figure>
 <p>参考链接：</p>
 <p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/AboutCoreBluetooth/Introduction.html" target="_blank" rel="noopener">About Core Bluetooth</a></p>
 <p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html#//apple_ref/doc/uid/TP40013257-CH3-SW1" target="_blank" rel="noopener">Performing Common Role Central Tasks</a></p>
@@ -541,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-overview"><span class="nav-number">1.</span> <span class="nav-text">0x00 - overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Starting-up-a-Central-Manager"><span class="nav-number">2.</span> <span class="nav-text">0x01 - Starting up a Central Manager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-scan"><span class="nav-number">3.</span> <span class="nav-text">0x02 - scan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Connecting-to-a-Peripheral"><span class="nav-number">4.</span> <span class="nav-text">0x03 - Connecting to a Peripheral</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-通信"><span class="nav-number">5.</span> <span class="nav-text">0x04 - 通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取CBService"><span class="nav-number">5.1.</span> <span class="nav-text">1. 获取CBService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取CBCharacteristic"><span class="nav-number">5.2.</span> <span class="nav-text">2. 获取CBCharacteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Retrieving-the-value-of-Characteristic"><span class="nav-number">5.3.</span> <span class="nav-text">3. Retrieving the value of Characteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Subscribing-to-a-Characteristic’s-Value"><span class="nav-number">5.4.</span> <span class="nav-text">4. Subscribing to a Characteristic’s Value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Write-the-Value-of-a-Characteristic"><span class="nav-number">5.5.</span> <span class="nav-text">5. Write the Value of a Characteristic</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-overview"><span class="nav-number">1.</span> <span class="nav-text">0x00 - overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Starting-up-a-Central-Manager"><span class="nav-number">2.</span> <span class="nav-text">0x01 - Starting up a Central Manager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-scan"><span class="nav-number">3.</span> <span class="nav-text">0x02 - scan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Connecting-to-a-Peripheral"><span class="nav-number">4.</span> <span class="nav-text">0x03 - Connecting to a Peripheral</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-通信"><span class="nav-number">5.</span> <span class="nav-text">0x04 - 通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取CBService"><span class="nav-number">5.1.</span> <span class="nav-text">1. 获取CBService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取CBCharacteristic"><span class="nav-number">5.2.</span> <span class="nav-text">2. 获取CBCharacteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Retrieving-the-value-of-Characteristic"><span class="nav-number">5.3.</span> <span class="nav-text">3. Retrieving the value of Characteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Subscribing-to-a-Characteristic’s-Value"><span class="nav-number">5.4.</span> <span class="nav-text">4. Subscribing to a Characteristic’s Value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Write-the-Value-of-a-Characteristic"><span class="nav-number">5.5.</span> <span class="nav-text">5. Write the Value of a Characteristic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-总结"><span class="nav-number">5.6.</span> <span class="nav-text">6. 总结</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -312,37 +312,14 @@
 
       
         
-          
-            <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 - 前言"></a>0x00 - 前言</h2><p>对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。</p>
-<h2 id="0x01-Foreground-Only-Apps"><a href="#0x01-Foreground-Only-Apps" class="headerlink" title="0x01 - Foreground-Only Apps"></a>0x01 - Foreground-Only Apps</h2><p>有一些应用只允许在前台使用，对于这种应用的话，蓝牙的就不需要设置后台运行权限。在应用退到后台的时候，系统提供了蓝牙断开/连接的弹窗提醒。不至于蓝牙断开了用户都一点都不知道。</p>
-<p><code>CBCentralManager</code>在调用<code>connectPeripheral:options:</code>的时候，option 可以设置为一下几种：</p>
-<ul>
-<li>CBConnectPeripheralOptionNotifyOnConnectionKey 蓝牙连接的时候弹窗提醒</li>
-<li>CBConnectPeripheralOptionNotifyOnDisconnectionKey 蓝牙断开的时候弹窗提醒</li>
-<li>CBConnectPeripheralOptionNotifyOnNotificationKey 接到任何通知的时候弹窗提醒</li>
-</ul>
-<h2 id="0x02-后台模式"><a href="#0x02-后台模式" class="headerlink" title="0x02 - 后台模式"></a>0x02 - 后台模式</h2><p> <code>Info.plist</code> 添加 <code>UIBackgroundModes</code> key，值为<code>bluetooth-central</code>或者<code>bluetooth-peripheral</code>，看场景区分使用</p>
-<p>对于一些需要常驻后台的app，系统提供了保存和恢复现场的方式让你的app“常驻”。具体需要实现以下4步：（前3步require，后1步option）</p>
-<p><strong>1、Opt In to State Preservation and Restoration</strong><br>初始化<code>CBCentralManager</code>或者<code>CBPeripheralManager</code>实例的时候指定 option key <code>CBCentralManagerOptionRestoreIdentifierKey</code>。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager =</span><br><span class="line">        [[CBCentralManager alloc] initWithDelegate:self queue:nil</span><br><span class="line">         options:@&#123; CBCentralManagerOptionRestoreIdentifierKey:</span><br><span class="line">         @&quot;myCentralManagerIdentifier&quot; &#125;];</span><br></pre></td></tr></table></figure>
-<p><strong>Note:</strong> 因为<code>CBCentralManager</code> 和 <code>CBPeripheralManager</code>可以有多个，在指定 option key 的时候需要确保 key 的唯一性。</p>
-<p><strong>2、Reinstantiate Your Central and Peripheral Managers</strong><br>当你的App在后台被系统重新启动的时候，需要重新去初始化central和peripheral。这就需要你第一步指定的<code>CBCentralManagerOptionRestoreIdentifierKey</code>去初始化。如果你只有一个central和一个peripheral的话，这一步系统会帮你做好了，你无需关心。</p>
-<p>如果你有多个central和peripheral的话，这就需要你自己选择相应的<code>CBCentralManagerOptionRestoreIdentifierKey</code>去重新初始化central和peripheral。</p>
-<p>具体如下，系统在重新启动你的app的时候会调用<code>application: didFinishLaunchingWithOptions:</code>，在这函数里面可以通过<code>launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey]</code>拿到所有的 IdentifierKey ，然后就可以去 Reinstantiate 了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application</span><br><span class="line">didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</span><br><span class="line"> </span><br><span class="line">    NSArray *centralManagerIdentifiers =</span><br><span class="line">        launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey];</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<p><strong>3、Implement the Appropriate Restoration Delegate Method</strong></p>
-<p>central 需要实现<code>centralManager:willRestoreState:</code> delegate<br>peripheral 需要实现<code>peripheralManager:willRestoreState:</code></p>
-<p>example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)centralManager:(CBCentralManager *)central</span><br><span class="line">      willRestoreState:(NSDictionary *)state &#123;</span><br><span class="line"> </span><br><span class="line">    NSArray *peripherals =</span><br><span class="line">        state[CBCentralManagerRestoredStatePeripheralsKey];</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<p><strong>4、 Update Your Initialization Process</strong></p>
-<p>这一步主要是为了让你了解到重新初始进程是否顺畅，是否从之前中断的地方重新开始了~</p>
-<p>例如，当在<code>centralManagerDidUpdateState:</code> 中初始化你的app的时候，你可以通过以下代码确定是否成功恢复到退出之前 peripheral 查找指定service的场景。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NSUInteger serviceUUIDIndex =</span><br><span class="line">        [peripheral.services indexOfObjectPassingTest:^BOOL(CBService *obj,</span><br><span class="line">        NSUInteger index, BOOL *stop) &#123;</span><br><span class="line">            return [obj.UUID isEqual:myServiceUUIDString];</span><br><span class="line">        &#125;];</span><br><span class="line"> </span><br><span class="line">    if (serviceUUIDIndex == NSNotFound) &#123;</span><br><span class="line">        [peripheral discoverServices:@[myServiceUUIDString]];</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
-<p>正如以上代码所展示的，如果系统在你查找服务的时候终止了你的程序。在调用<code>discoverServices:</code>探索存储的peripheral数据之前，如果你的app成功查找到了service，你就可以去检查是否有合适的 characteristics被查找到了，这样你就可以知道自己是否在正确的时间调用了正确的方法了。</p>
-<p>参考：</p>
-<p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html#//apple_ref/doc/uid/TP40013257-CH7-SW1" target="_blank" rel="noopener">Core Bluetooth Background Processing for iOS Apps</a></p>
-
-          
+          <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 - 前言"></a>0x00 - 前言</h2><p>对于蓝牙来说，如果不设置相关的后台运行许可，那么在程序退到后台的时候是系统是不允许做蓝牙的相关操作的。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/06/27/Core-Bluetooth-Background-Procesing/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -567,7 +544,16 @@
 
       
         
-          <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 - overview"></a>0x00 - overview</h2><p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
+          <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 - overview"></a>0x00 - overview</h2><p><strong>常见名称和缩写</strong></p>
+<p><code>MFI</code><strong>:</strong> make for ipad ,iphone, itouch 专们为苹果设备制作的设备</p>
+<p><code>BLE</code><strong>:</strong> buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE</p>
+<p><code>peripheral</code>,<code>central</code><strong>:</strong> 外设和中心,发起连接的时central，被连接的设备为perilheral</p>
+<p><code>service</code> and <code>characteristic</code> <strong>:</strong> 服务和特征 每个设备会提供服务和特征，类似于服务端的api，但是机构不同。每个外设会有很多服务，每个服务中包含很多字段，这些字段的权限一般分为 读read，写write，通知notiy几种，就是我们连接设备后具体需要操作的内容。</p>
+<p>Description 每个characteristic可以对应一个或多个Description用户描述characteristic的信息或属性</p>
+<p><code>MFI</code> 开发使用ExternalAccessory 框架</p>
+<p><code>4.0 BLE</code> 开发使用CoreBluetooth 框架</p>
+<hr>
+<p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/06/27/Core-Bluetooth/#more" rel="contents">
