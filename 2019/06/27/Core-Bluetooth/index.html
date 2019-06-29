@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE peripheral,central: 外设和中心,发起连接的时central，被连接的设备为perilheral service and characteris">
+<meta name="description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Core Bluetooth">
 <meta property="og:url" content="http://yoursite.com/2019/06/27/Core-Bluetooth/index.html">
 <meta property="og:site_name" content="朝元的博客">
-<meta property="og:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE peripheral,central: 外设和中心,发起连接的时central，被连接的设备为perilheral service and characteris">
+<meta property="og:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
-<meta property="og:updated_time" content="2019-06-29T07:10:43.313Z">
+<meta property="og:updated_time" content="2019-06-29T07:53:27.241Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core Bluetooth">
-<meta name="twitter:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE peripheral,central: 外设和中心,发起连接的时central，被连接的设备为perilheral service and characteris">
+<meta name="twitter:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE">
 <meta name="twitter:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
 
 
@@ -316,6 +316,7 @@
         <h2 id="0x00-overview"><a href="#0x00-overview" class="headerlink" title="0x00 - overview"></a>0x00 - overview</h2><p><strong>常见名称和缩写</strong></p>
 <p><code>MFI</code><strong>:</strong> make for ipad ,iphone, itouch 专们为苹果设备制作的设备</p>
 <p><code>BLE</code><strong>:</strong> buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE</p>
+<a id="more"></a>
 <p><code>peripheral</code>,<code>central</code><strong>:</strong> 外设和中心,发起连接的时central，被连接的设备为perilheral</p>
 <p><code>service</code> and <code>characteristic</code> <strong>:</strong> 服务和特征 每个设备会提供服务和特征，类似于服务端的api，但是机构不同。每个外设会有很多服务，每个服务中包含很多字段，这些字段的权限一般分为 读read，写write，通知notiy几种，就是我们连接设备后具体需要操作的内容。</p>
 <p>Description 每个characteristic可以对应一个或多个Description用户描述characteristic的信息或属性</p>
@@ -323,7 +324,6 @@
 <p><code>4.0 BLE</code> 开发使用CoreBluetooth 框架</p>
 <hr>
 <p>蓝牙主要分两部分：<code>Central</code> 和 <code>Peripheral</code>。</p>
-<a id="more"></a>
 <p><code>Central</code> 主要负责发现和连接外设，Central 的主要类是 <code>CBCentralManager</code>；</p>
 <p><code>Peripheral</code> 主要负责监测收集和发送数据给Central，Peripheral 的主要类是<code>CBPeripheral</code>。</p>
 <p><code>CBperipheral</code> 是由一个或者多个<code>CBService</code>组成，CBService 又是由多个<code>CBCharacteristic</code>组成。</p>
