@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="1.设置假的间距，我们在tableviewcell的contentView上添加一个view，比如让其距离上下左右的距离都是10；这个方法是最容易想到的； 2.用UICollectionView来代替tableview，然后通过下面这个函数来设置UICollectionViewCell的上下左右的间距； 123456789//协议中的方法，用于返回单元格的大小  - (CGSize)collect">
+<meta name="description" content="1.设置假的间距，我们在tableviewcell的contentView上添加一个view，比如让其距离上下左右的距离都是10；这个方法是最容易想到的；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设置UITableViewCell之间的间距(推荐第四种)">
 <meta property="og:url" content="http://yoursite.com/2018/05/24/设置UITableViewCell之间的间距-推荐第四种/index.html">
 <meta property="og:site_name" content="朝元的博客">
-<meta property="og:description" content="1.设置假的间距，我们在tableviewcell的contentView上添加一个view，比如让其距离上下左右的距离都是10；这个方法是最容易想到的； 2.用UICollectionView来代替tableview，然后通过下面这个函数来设置UICollectionViewCell的上下左右的间距； 123456789//协议中的方法，用于返回单元格的大小  - (CGSize)collect">
+<meta property="og:description" content="1.设置假的间距，我们在tableviewcell的contentView上添加一个view，比如让其距离上下左右的距离都是10；这个方法是最容易想到的；">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-30T02:35:53.535Z">
+<meta property="og:updated_time" content="2019-07-02T09:33:09.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设置UITableViewCell之间的间距(推荐第四种)">
-<meta name="twitter:description" content="1.设置假的间距，我们在tableviewcell的contentView上添加一个view，比如让其距离上下左右的距离都是10；这个方法是最容易想到的； 2.用UICollectionView来代替tableview，然后通过下面这个函数来设置UICollectionViewCell的上下左右的间距； 123456789//协议中的方法，用于返回单元格的大小  - (CGSize)collect">
+<meta name="twitter:description" content="1.设置假的间距，我们在tableviewcell的contentView上添加一个view，比如让其距离上下左右的距离都是10；这个方法是最容易想到的；">
 
 
 
@@ -312,6 +312,7 @@
 
       
         <p>1.设置假的间距，我们在<code>tableviewcell</code>的<code>contentView</code>上添加一个view，比如让其距离上下左右的距离都是<code>10</code>；这个方法是最容易想到的；</p>
+<a id="more"></a>
 <p>2.用<code>UICollectionView</code>来代替<code>tableview</code>，然后通过下面这个函数来设置<code>UICollectionViewCell</code>的上下左右的间距；</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//协议中的方法，用于返回单元格的大小  </span><br><span class="line">- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath&#123;  </span><br><span class="line">    return CGSizeMake(ScreenWidth-20,150);  </span><br><span class="line">&#125;  </span><br><span class="line">//协议中的方法，用于返回整个CollectionView上、左、下、右距四边的间距  </span><br><span class="line">- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section&#123;  </span><br><span class="line">    //上、左、下、右的边距  </span><br><span class="line">    return UIEdgeInsetsMake(10, 10, 10, 10);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>3.用控件<code>tableview</code>，比如有十条数据，那就给<code>tableview</code>分十组，每组只放一条数据，也就是一个<code>cell</code>，然后设置<code>UICollectionViewCell</code>的<code>head view</code>和<code>foot view</code>来设置<code>cell</code>的间距，但是这个方法只能设置上下间距，如果想设置距离屏幕左右的距离，可以设置<code>uitableview</code>距离左右的距离；<code>uitableview</code>的<code>style</code>为<code>UITableViewStyleGrouped</code>；不然<code>headview</code>会浮动；</p>
@@ -431,7 +432,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

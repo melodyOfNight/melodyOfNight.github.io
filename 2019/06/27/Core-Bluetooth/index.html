@@ -101,7 +101,7 @@
 <meta property="og:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
-<meta property="og:updated_time" content="2019-06-29T07:53:27.241Z">
+<meta property="og:updated_time" content="2019-07-01T01:51:27.764Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Core Bluetooth">
 <meta name="twitter:description" content="0x00 - overview常见名称和缩写 MFI: make for ipad ,iphone, itouch 专们为苹果设备制作的设备 BLE: buletouch low energy，蓝牙4.0设备因为低耗电，所以也叫做BLE">
@@ -333,7 +333,7 @@
 <h2 id="0x01-Starting-up-a-Central-Manager"><a href="#0x01-Starting-up-a-Central-Manager" class="headerlink" title="0x01 - Starting up a Central Manager"></a>0x01 - Starting up a Central Manager</h2><p>开始使用的时候需要先创建一<code>CBCentralManager</code>实例。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];</span><br></pre></td></tr></table></figure>
 <p>参数<code>nil</code> 则默认在主队列。</p>
-<p>当创建完以上的实例的时候，Central 回去调用 delegate 的<code>centralManagerDidUpdateState:</code> 这个方法确认蓝牙是否被Central所支持。</p>
+<p>当创建完以上的实例的时候，Central 会去调用 delegate 的<code>centralManagerDidUpdateState:</code> 这个方法确认蓝牙是否被Central所支持。</p>
 <h2 id="0x02-scan"><a href="#0x02-scan" class="headerlink" title="0x02 - scan"></a>0x02 - scan</h2><p>之后便是去扫描周边的外设：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[myCentralManager scanForPeripheralsWithServices:nil options:nil];</span><br></pre></td></tr></table></figure>
 <p>发现外设的话会通过delegate去告诉外面。</p>
@@ -413,8 +413,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/08/work-on-personal-pc-test/" rel="next" title="work on personal pc test">
-                <i class="fa fa-chevron-left"></i> work on personal pc test
+              <a href="/2018/08/26/iOS-插入数据到-TableView-顶部/" rel="next" title="iOS 插入数据到 TableView 顶部">
+                <i class="fa fa-chevron-left"></i> iOS 插入数据到 TableView 顶部
               </a>
             
           </div>
@@ -497,7 +497,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

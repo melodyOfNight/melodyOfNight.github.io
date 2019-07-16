@@ -1,0 +1,926 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="0x01 - 概览蓝牙技术最早是在1994年由爱立信发明的，主要是为了研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。经过十几年的发展，于2010年7月7号推出了蓝牙4.0规范，4.0之前的蓝牙统称为经典蓝牙，4.0之后又加入了低功耗蓝牙，目前最新的版本是蓝牙5.0规范，于2016年6月发布。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="蓝牙技术分享">
+<meta property="og:url" content="http://yoursite.com/2019/07/12/蓝牙技术分享/index.html">
+<meta property="og:site_name" content="朝元的博客">
+<meta property="og:description" content="0x01 - 概览蓝牙技术最早是在1994年由爱立信发明的，主要是为了研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。经过十几年的发展，于2010年7月7号推出了蓝牙4.0规范，4.0之前的蓝牙统称为经典蓝牙，4.0之后又加入了低功耗蓝牙，目前最新的版本是蓝牙5.0规范，于2016年6月发布。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/peripheral-central.png">
+<meta property="og:image" content="http://yoursite.com/images/TreeOfServicesAndCharacteristics_Remote.png">
+<meta property="og:image" content="http://yoursite.com/images/service-characteristics.png">
+<meta property="og:image" content="http://yoursite.com/images/bluetooth-packet.png">
+<meta property="og:image" content="http://yoursite.com/images/bluetooth-write-with-response.png">
+<meta property="og:image" content="http://yoursite.com/images/bluetooth-EDL.png">
+<meta property="og:image" content="http://yoursite.com/images/bluetooth-L2CAP-EDL.png">
+<meta property="og:image" content="http://yoursite.com/images/bluetooth-throughput.png">
+<meta property="og:updated_time" content="2019-07-16T06:16:33.254Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="蓝牙技术分享">
+<meta name="twitter:description" content="0x01 - 概览蓝牙技术最早是在1994年由爱立信发明的，主要是为了研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。经过十几年的发展，于2010年7月7号推出了蓝牙4.0规范，4.0之前的蓝牙统称为经典蓝牙，4.0之后又加入了低功耗蓝牙，目前最新的版本是蓝牙5.0规范，于2016年6月发布。">
+<meta name="twitter:image" content="http://yoursite.com/images/peripheral-central.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/12/蓝牙技术分享/"/>
+
+
+
+
+
+  <title>蓝牙技术分享 | 朝元的博客</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">朝元的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/蓝牙技术分享/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">蓝牙技术分享</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T17:05:07+08:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01-概览"><a href="#0x01-概览" class="headerlink" title="0x01 - 概览"></a>0x01 - 概览</h1><p>蓝牙技术最早是在1994年由爱立信发明的，主要是为了研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。经过十几年的发展，于2010年7月7号推出了蓝牙4.0规范，4.0之前的蓝牙统称为<code>经典蓝牙</code>，4.0之后又加入了<code>低功耗蓝牙</code>，目前最新的版本是蓝牙5.0规范，于2016年6月发布。</p>
+<a id="more"></a>
+<p><strong>蓝牙的两种类型</strong></p>
+<ul>
+<li><a href="https://web.archive.org/web/20171207140908/https://www.bluetooth.com/zh-cn/what-is-bluetooth-technology/how-it-works/br-edr" target="_blank" rel="noopener">蓝牙基础率/增强数据率 (BR/EDR)</a>，以点对点（P2P）网络拓扑结构建立一对一（1:1）设备通信，主要用于无线扬声器、耳机和免提车载系统；</li>
+<li><a href="https://web.archive.org/web/20171207140908/https://www.bluetooth.com/zh-cn/what-is-bluetooth-technology/how-it-works/le-p2p" target="_blank" rel="noopener">低耗能 (LE) 蓝牙</a>，使用多个网络拓扑结构，包括点对点、广播和网格，主要用于健身追踪器、健康监测仪等联网设备产品。</li>
+</ul>
+<p><strong>存在哪些差异？</strong></p>
+<ul>
+<li><code>蓝牙 BR/EDR</code>—可建立相对较短距离的持续无线连接，因此非常适用于流式音频等应用</li>
+<li><code>蓝牙 LE</code>—可建立短时间的长距离无线电连接，非常适用于无需持续连接但依赖电池具有较长寿命的的物联网 (IoT) 应用</li>
+<li><code>双模</code>—双模芯片可支持需要连接 BR/EDR 设备（例如音频耳机）以及 LE 设备（例如穿戴设备或零售信标）的单一设备（例如智能手机或平板电脑）</li>
+</ul>
+<p><strong>特别需要注意的一点是：</strong></p>
+<p>对于单模的<code>经典蓝牙</code>和<code>低功耗蓝牙</code>是<strong>不能相互通信的</strong>。所以在选型的时候需要特别注意，是选择单模的还是双模的，单模的话需要同是经典蓝牙或者低功耗蓝牙才行。</p>
+<h1 id="0x02-蓝牙的功能与局限"><a href="#0x02-蓝牙的功能与局限" class="headerlink" title="0x02 - 蓝牙的功能与局限"></a>0x02 - 蓝牙的功能与局限</h1><p>目前常用的短距离无线通信技术有<code>蓝牙</code>、<code>WIFI</code>、<code>Zigbee</code>。</p>
+<p>为什么选择蓝牙呢？很关键的一个原因是蓝牙的<code>低成本</code>和<code>低耗电</code>的特性。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">技术规范</th>
+<th style="text-align:center">经典蓝牙</th>
+<th style="text-align:right">低功耗蓝牙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">无线电频率</td>
+<td style="text-align:center">2.4 GHz</td>
+<td style="text-align:right">2.4GHz</td>
+</tr>
+<tr>
+<td style="text-align:left">距离</td>
+<td style="text-align:center">10米 ~100米</td>
+<td style="text-align:right">30米</td>
+</tr>
+<tr>
+<td style="text-align:left">无线传输速率</td>
+<td style="text-align:center">1~3 Mb/s</td>
+<td style="text-align:right">1 Mb/s</td>
+</tr>
+<tr>
+<td style="text-align:left">应用吞吐量</td>
+<td style="text-align:center">0.7~2.1 Mb/s</td>
+<td style="text-align:right">0.2 Mb/s</td>
+</tr>
+<tr>
+<td style="text-align:left">节点单元</td>
+<td style="text-align:center">7~16777184</td>
+<td style="text-align:right">未定义（理论最大值为2^32）</td>
+</tr>
+</tbody>
+</table>
+<p>参考来源：<a href="https://zh.wikipedia.org/wiki/%E8%97%8D%E7%89%99" target="_blank" rel="noopener">蓝牙 - 维基百科</a></p>
+<p>上面表格可以看到，无论是经典蓝牙还是低功耗蓝牙，本身的传输速率并不低。实际测试中，iOS 的传输速率只能达到 100byte/s ，是因为 iOS 系统做了限制了（越狱之后，会有一些第三方插件如AIRBLUE SHARING，可以支持两个手机之间用蓝牙传输文件，速度可以达到80Kb/s）</p>
+<h1 id="0x03-使用"><a href="#0x03-使用" class="headerlink" title="0x03 - 使用"></a>0x03 - 使用</h1><p>这里主要讨论<code>蓝牙4.0</code>的使用，并不是所有手机都支持蓝牙4.0技术，iPhone需要4S以上的手机，安卓需要系统4.3及以上的版本。</p>
+<p><img src="../../../../images/peripheral-central.png" alt=""></p>
+<p>  （ 图 1-1 ）</p>
+<p>开发之前，iOS 10.0之后的系统都需要在<code>Info.plist</code>里面添加请求使用蓝牙功能模块的key <code>NSBluetoothPeripheralUsageDescription</code>，否则会导致功能不可用或者是崩溃！</p>
+<p>如上图，蓝牙模块的主要核心是由<code>Central</code>和<code>Peripheral</code>组成。</p>
+<ul>
+<li><code>Central</code> ： 主要负责发现和连接外设，读写外设的数据</li>
+<li><code>Peripheral</code> ： 主要负责监测收集、对外广播和发送数据。</li>
+</ul>
+<p><img src="../../../../images/TreeOfServicesAndCharacteristics_Remote.png" alt="TreeOfServicesAndCharacteristics_Remote"></p>
+<p><code>CBPeripheral</code>是由一个或者多个<code>CBService</code>组成，<code>CBService</code>又是由多个<code>CBCharacteristic</code>组成。</p>
+<ul>
+<li><code>CBService</code> ： Peripheral 对外提供的服务，是一组功能或数据的集合；</li>
+<li><code>CBCharacteristic</code> ： CBService 的子集，某个功能的具体特性，用于存放收集的的数据。</li>
+</ul>
+<p>从CS架构模式来看 CoreBluetooth 提供的 Central 和 Peripheral。刚开始看的时候很容易把 Central 理解成 Server，其实刚好相反，Peripheral 才是我们的 Server。</p>
+<p>如 (图 1-1) 所示，Peripheral 和 Central 之间建立的是一对多的关系。每个Peripheral 会以广播的模式告诉外界自己能提供哪些 Service，这里 Service 的概念和我们传统CS架构当中的 Service 基本是一致的，每个 PeriPheral 可以提供多个 Service，而每个 Service 呢，会包含多个 characteristic，characteristic 是个陌生但十分关键的概念，可以把 characteristic 理解成一个 Service 模块具体提供哪些服务，比如一个心率监测 Service 同时包含心率测量 characteristic 和地理位置定位characteristic。</p>
+<p><img src="../../../../images/service-characteristics.png" alt="service and Characteristics"></p>
+<p>Peripheral 作为 Server，Central 作为 Client，Peripheral 广播自己的 Service和 characteristic，Central 订阅某一个具体的 characteristic，Peripheral 就和Central 之间通过 characteristic 建立了一个双向的数据通道，整个模型非常简洁而且符合我们CS的架构体系。</p>
+<p>接下来具体看下 CoreBluetooth 的相关API</p>
+<h2 id="Server-端"><a href="#Server-端" class="headerlink" title="Server 端"></a>Server 端</h2><h3 id="Peripheral"><a href="#Peripheral" class="headerlink" title="Peripheral"></a>Peripheral</h3><blockquote>
+<ol>
+<li>创建 Peripheral ，也就是我们的 Server</li>
+<li>生成 Service 以备添加到 Peripheral 中</li>
+<li>生成 characteristics 以备添加到 Service 中</li>
+<li>建立 Peripheral、Service、characteristics 三者之间的关系并开始广播服务</li>
+</ol>
+</blockquote>
+<ul>
+<li><strong>创建 Peripheral ，也就是我们的 Server</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_peripheral = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>生成 Service 以备添加到 Peripheral 中</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CBMutableService *transferService = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID] primary:YES];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>生成 characteristics 以备添加到 Service 中</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]</span><br><span class="line">                                                                     properties:CBCharacteristicPropertyNotify|CBCharacteristicPropertyWrite</span><br><span class="line">                                                                          value:nil</span><br><span class="line">                                                                    permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>建立 Peripheral、Service、characteristics 三者之间的关系并开始广播服务</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//建立关系</span><br><span class="line">transferService.characteristics = @[self.transferCharacteristic];</span><br><span class="line">[self.peripheral addService:transferService];</span><br><span class="line">//开始广播</span><br><span class="line">[self.peripheral startAdvertising:@&#123; CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] &#125;];</span><br></pre></td></tr></table></figure>
+<h2 id="Client-端"><a href="#Client-端" class="headerlink" title="Client 端"></a>Client 端</h2><h3 id="Central"><a href="#Central" class="headerlink" title="Central"></a>Central</h3><blockquote>
+<ol>
+<li>创建 Central</li>
+<li>扫描可用的 Peripheral</li>
+<li>连接 Peripheral</li>
+<li>连接之后查找 Peripheral 下可用的 Service</li>
+<li>找到 Service 之后，进一步查找需要的 Characteristics 并订阅</li>
+</ol>
+</blockquote>
+<ul>
+<li><strong>创建 Central:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_central = [[CBCentralManager alloc] initWithDelegate:self queue:nil];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>扫描可用的 Peripheral:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[self.central scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]</span><br><span class="line">                                         options:@&#123; CBCentralManagerScanOptionAllowDuplicatesKey : @YES &#125;];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>扫描到 Peripheral 之后连接:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.central connectPeripheral:targetPeripheral options:nil];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>连接之后查找 Peripheral 下可用的 Service：</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>找到 Service 之后，进一步查找需要的 Characteristics 并订阅:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//查找Characteristics</span><br><span class="line">[peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]] forService:service];</span><br><span class="line">//订阅</span><br><span class="line">[peripheral setNotifyValue:YES forCharacteristic:characteristic];</span><br></pre></td></tr></table></figure>
+<p>订阅之后 Central 和 Peripheral 之间就建立了一个双向的数据通道，后续二者之间的数据传输(读写)就可以通过 characteristic 来完成了。</p>
+<h2 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h2><p>先看下 Peripheral 是如何向 Central 发送数据的，当数据有更新的时候 Peripheral 会向自己的 characteristics 写数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.peripheral updateValue:data forCharacteristic:self.transferCharacteristic onSubscribedCentrals:@[self.central]];</span><br></pre></td></tr></table></figure>
+<p>Central 之前有订阅过该 characteristics ，当 characteristics 有变化的时候，Central 那一端通过回调会收到来自 Peripheral 的数据流：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error;</span><br></pre></td></tr></table></figure>
+<p>当 Central 需要对 Peripheral 回写数据的时候，则通过调用如下的接口进行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.discoveredPeripheral writeValue:data forCharacteristic:self.discoveredCharacterstic type:CBCharacteristicWriteWithoutResponse];</span><br></pre></td></tr></table></figure>
+<p>Peripheral 端会收到如下回调：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray&lt;CBATTRequest *&gt; *)requests</span><br></pre></td></tr></table></figure>
+<p>通过读取 request 中的 value 就可以获取到 Central 发送过来的数据了。</p>
+<p>对于少量的数据传输，使用以上的接口便可以满足我们的需求，当对于固件升级（Air OTA）这种需要传输大量数据的，有什么好的方案可以实现呢？</p>
+<p>首先我们来看一个图：</p>
+<p><img src="../../../../images/bluetooth-packet.png" alt="bluetooth packet"></p>
+<p>低功耗蓝牙标准协议里面定义了最大的 MTU 为 <code>27 Bytes</code>，packet 在向下传输的时候，经过<code>GATT</code>、<code>ATT</code>又会损耗掉<code>7 Btyes</code>，所以<strong>一个包最终可用的最大传输 MTU 为 20 Bytes。</strong>并且，一旦你的数据通过了控制器，硬件又会添加链路层安全并且 CRC 也会延长传输数据包的时间</p>
+<p>为了提高传输数据量，苹果又做了哪些优化呢？</p>
+<ul>
+<li><strong>提高单位时间内的写入次数（Write Without Response）</strong></li>
+<li><strong>拓展数据长度(Extended Data Length),蓝牙4.2之后支持</strong></li>
+<li><strong>L2CAP + EDL</strong></li>
+<li><strong>缩短请求间隔</strong></li>
+</ul>
+<p><strong>提高单位时间内的写入次数（Write Without Response）</strong></p>
+<p><img src="../../../../images/bluetooth-write-with-response.png" alt="write with response"></p>
+<p>如上图，正常写入一个数据包需要花费 2 个时间间隔（一个时间间隔用于写入，一个时间间隔用于回复），这种方式的写入是非常稀疏的，并没有很好地利用可用的带宽。</p>
+<p>Core Bluetooth 在底层做了一个可靠的<code>可持续写入</code>且<code>不需要等回包</code>的机制，以增加单位时间内写入的频次，提高发送的数据量。</p>
+<p>根据苹果官方说法，只要根据文档配置API就可以安全可靠的发送数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CB_EXTERN_CLASS @interface CBPeripheral : CBPeer</span><br><span class="line"></span><br><span class="line">- (NSUInteger)maximumWriteValueLengthForType:(CBCharacteristicWriteType)type NS_AVAILABLE(10_12, 9_0);</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CB_EXTERN_CLASS @interface CBCentral : CBPeer</span><br><span class="line">@property(readonly, nonatomic) NSUInteger maximumUpdateValueLength;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>具体的 MTU 则是系统根据连接事件长度和系统配置来计算的。另外，外设也必须支持最大 MTU 以达到最大的数据吞吐量。</p>
+<p><strong>拓展数据长度(蓝牙4.2之后才支持)</strong></p>
+<p> 相比之前的 27 bytes，4.2 之后的数据包支持最大<code>251 bytes</code>，单是一个数据包就提高了 9 倍多了，再加上不回包持续写入的优化，整整提高了10倍的传输量。</p>
+<p><img src="../../../../images/bluetooth-EDL.png" alt="bluetooth-EDL"></p>
+<p><strong>L2CAP + EDL</strong></p>
+<p><img src="../../../../images/bluetooth-L2CAP-EDL.png" alt="L2CAP + EDL"></p>
+<p>直接去掉了 GATT，ATT 的限制(比如限制最大属性大小为 512)，所以我们现在能够写入更大的值，也可以使用更大的 MTU，数据的吞吐量也会增加很多，达到 <code>200 kbps</code> 左右。</p>
+<p><strong>缩短连接间隔（Faster Connection Interval）</strong></p>
+<p>在 Core Bluetooth 中，请求连接的间隔是15ms，所以当你在更新你的固件的时候，你可以请求一个参数更新并将时间间隔的最小值和最大值设置为15ms。</p>
+<p><img src="../../../../images/bluetooth-throughput.png" alt="bluetooth-throughput"></p>
+<p>从上面这张图可以看到，要做固件升级的话最优的解决方案是：<code>L2CAP+EDL+15ms</code></p>
+<h2 id="后台处理"><a href="#后台处理" class="headerlink" title="后台处理"></a>后台处理</h2><p>由于 iOS 系统对后台运行做了很多限制，所以必须明确你开发的 App 是属于前台 App 还是后台App 还是二者都要支持的。</p>
+<p>默认情况下，不管是Central还是Peripheral，当App处于后台或者被挂起的时候蓝牙功能都是无法使用的。因此，你需要显示的去设置后台运行模式。</p>
+<ul>
+<li><code>Info.plist</code> 添加<code>UIBackgroundModes</code>的key，value 根据需要如果是Central就设置为<code>bluetooth-central</code>；如果是 Peripheral 就设置为<code>bluetooth-central</code></li>
+</ul>
+<h3 id="后台-Central"><a href="#后台-Central" class="headerlink" title="后台 Central"></a>后台 Central</h3><p>在后台运行 Central 的时候，它还是跟前台一样可以发现和连接到外设，并且和外设进行交互读写数据，但在扫描时候还是有点不同：</p>
+<ul>
+<li>扫描可选key <code>CBCentralManagerScanOptionAllowDuplicatesKey</code> 会被忽略，扫描到的多个广播信号会被合并成一个事件；</li>
+<li>后台模式下，扫描的时间间隔会变长，因此会比前台花更多的时间去发现外设。</li>
+</ul>
+<h3 id="后台-Peripheral"><a href="#后台-Peripheral" class="headerlink" title="后台 Peripheral"></a>后台 Peripheral</h3><p>同样的，后台 Peripheral 也可以进行广播，接收连接请求，读写数据。当广播信号的时候还是跟前台有点不同：</p>
+<ul>
+<li>广播的key<code>CBAdvertisementDataLocalNameKey</code> 会被忽略，外设的本地名字不会被广播；</li>
+<li>包含<code>CBAdvertisementDataServiceUUIDsKey</code>key的服务UUIDSs被放置在一个“溢出”区域，它们只能被显式扫描它们的iOS设备所发现；</li>
+<li>后台模式下，发送广播包的数量会减少。</li>
+</ul>
+<h3 id="在后台执行长（long-term）任务"><a href="#在后台执行长（long-term）任务" class="headerlink" title="在后台执行长（long-term）任务"></a>在后台执行长（long-term）任务</h3><p>想象一个这样的场景，你开发了一款由蓝牙开门的App，当你走近门的时候就自动连接并解锁。远离门的时候断开连接就锁上了。当用户长时间离开家或者出差几天，这时候App会被系统挂起或者杀死，当你回到家的时候需要App能够自动被唤醒然后解锁门。</p>
+<p>对于这种类似的App，就需要蓝牙在后台能够长时间保活。</p>
+<p>Core BlueBooth 利用<code>状态的保存和恢复</code>来解决这种问题。可以通过制定一个唯一的标识符，要去系统在挂起或者杀死App的时候保存当前的状态，然后在恢复的时候使用这个标识符恢复到被杀死前的状态，以达到长时间“保活”的目的。</p>
+<h3 id="添加状态保存和恢复支持"><a href="#添加状态保存和恢复支持" class="headerlink" title="添加状态保存和恢复支持"></a>添加状态保存和恢复支持</h3><p>Core Bluetooth中的状态保存与恢复是可选的特性，需要程序的支持才能工作。我们可以按照以下步骤来添加这一特性的支持：</p>
+<ol>
+<li>(必要步骤)当分配及初始化Central或Peripheral管理器对象时，选择性加入状态保存与恢复。</li>
+<li>(必要步骤)在系统重启程序时，重新初始化Central或Peripheral管理器对象</li>
+<li>(必要步骤)实现适当的恢复代理方法</li>
+<li>(可选步骤)更新Central或Peripheral管理器初始化过程</li>
+</ol>
+<p><strong>选择性加入状态保存与恢复</strong></p>
+<p>在初始化 Central 的时候制定存储的key <code>CBCentralManagerOptionRestoreIdentifierKey</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager =</span><br><span class="line">        [[CBCentralManager alloc] initWithDelegate:self queue:nil</span><br><span class="line">         options:@&#123; CBCentralManagerOptionRestoreIdentifierKey:</span><br><span class="line">         @&quot;myCentralManagerIdentifier&quot; &#125;];</span><br></pre></td></tr></table></figure>
+<p><strong>重新初始化Central或Peripheral管理器对象</strong></p>
+<p>当系统在后台重启程序时，我们所需要做的第一件事就是使用恢复标识来重新初始化这些对象。我们可以通过在程序代理对象的<code>application:didFinishLaunchingWithOptions:</code>方法中，使用合适的启动选项键来访问管理器对象的列表(这个列表是程序关闭是系统为程序保存的)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions</span><br><span class="line">&#123;</span><br><span class="line">    // Override point for customization after application launch.</span><br><span class="line">    </span><br><span class="line">    NSArray *centralManagerIdentifiers = launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey];</span><br><span class="line">    </span><br><span class="line">    // TODO: ...</span><br><span class="line">    </span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了这个恢复标识的列表后，我们就可以重新初始化我们所需要的管理器对象了。</p>
+<p><strong>实现适当的恢复代理方法</strong></p>
+<p>重新初始化Central或Peripheral管理器对象后，我们通过使用蓝牙系统的状态同步这些对象的状态来恢复它们。此时，我们需要实现一些恢复代理方法。对于Central管理器，我们实现centralManager:willRestoreState:代理方法；对于Peripheral管理器管理器，我们实现peripheralManager:willRestoreState:代理方法。</p>
+<blockquote>
+<p>Note:<br>对于选择性加入保存与恢复特性的应用来说，这些方法是程序启动到后台以完成一些蓝牙相关任务所调用的第一个方法。而对于非选择性加入特性的应用来说，会首先调用<code>centralManagerDidUpdateState:</code>和<code>peripheralManagerDidUpdateState:</code>代理方法。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary *)state</span><br><span class="line">&#123;</span><br><span class="line">    NSArray *peripherals = state[CBCentralManagerRestoredStatePeripheralsKey];</span><br><span class="line">    </span><br><span class="line">    // TODO: ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过<code>CBCentralManagerRestoredStatePeripheralsKey</code>键来获取Central管理器已连接的或尝试连接的所有Peripheral设备的列表，获取到这个列表后，我们便可以根据需要来做处理。</p>
+<p><strong>更新初始化过程</strong></p>
+<p>在实现了前面的三个步骤后，我们可能想更新我们的管理器的初始化过程。虽然这一步是可选的，但如果要确认任务是否运行正常时会非常有用。例如，我们的程序可能在解析所连接的Peripheral设备的数据的过程中被关闭。当程序使用这个Peripheral设备作恢复操作时，无法知道数据处理到哪了。我们需要确保程序从数据操作停止的位置继续开始操作。</p>
+<p>如下面的代码展示了在<code>centralManagerDidUpdateState:</code>代理方法中初始化程序操作时，我们可以找出是否成功发现了被恢复的Peripheral设备的指定服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NSUInteger serviceUUIDIndex = [peripheral.services indexOfObjectPassingTest:^BOOL(CBService *obj, NSUInteger index, BOOL *stop) &#123;</span><br><span class="line">        return [obj.UUID isEqual:myServiceUUIDString];</span><br><span class="line">    &#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    if (serviceUUIDIndex == NSNotFound) &#123;</span><br><span class="line">        [peripheral discoverServices:@[myServiceUUIDString]];</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上例所述，如果系统在程序完成搜索服务时关闭了应用，则通过调用<code>discoverServices:</code>方法在关闭的那个点开始解析恢复的Peripheral数据。如果程序成功搜索到服务，我们可以确认是否搜索到正确的特性。通过更新初始化过程，我们可以确保在正确的时间调用正确的方法。</p>
+<p>虽然我们可能需要声明应用支持Core Bluetooth后台执行模式，以完成特定的任务，但总是应该慎重考虑执行后台操作。因为执行太多的蓝牙相关任务需要使用iOS设备的内置无线电，而无线电的使用会影响到电池的寿命，所以尽量减少在后台执行的任务。任何会被蓝牙相关任务唤醒的应用应该尽快处理任务并在完成时重新挂起。</p>
+<p>下面是一些基础的准则：</p>
+<ol>
+<li>应用应该是基于会话的，并提供接口以允许用户决定什么时候开始及结束蓝牙相关事件的分发。</li>
+<li>一旦被唤醒，一个应用大概有10s的时间来完成任务。理想情况下，应用应该尽快完成任务并重新挂起。系统可以对执行时间太长的后台任务进行限流甚至杀死。</li>
+<li>应用被唤醒时，不应该执行一些无关紧要的操作。</li>
+</ol>
+<p>参考链接：</p>
+<p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/AboutCoreBluetooth/Introduction.html" target="_blank" rel="noopener">About Core Bluetooth</a></p>
+<p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html#//apple_ref/doc/uid/TP40013257-CH3-SW1" target="_blank" rel="noopener">Performing Common Role Central Tasks</a></p>
+<p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html#//apple_ref/doc/uid/TP40013257-CH7-SW1" target="_blank" rel="noopener">Core Bluetooth Programming Guide</a></p>
+<p><a href="https://developer.apple.com/videos/play/wwdc2017/712/" target="_blank" rel="noopener">WWDC 2017: What’s New in Core Bluetooth</a></p>
+<p>备注：<br>点对点，一对一<br>广播，一对多<br>网格（Mesh），指的是多对多</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/01/iOS开发之玩转蓝牙CoreBluetooth/" rel="next" title="iOS开发之玩转蓝牙CoreBluetooth">
+                <i class="fa fa-chevron-left"></i> iOS开发之玩转蓝牙CoreBluetooth
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpeg"
+               alt="朝元" />
+          <p class="site-author-name" itemprop="name">朝元</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-概览"><span class="nav-number">1.</span> <span class="nav-text">0x01 - 概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-蓝牙的功能与局限"><span class="nav-number">2.</span> <span class="nav-text">0x02 - 蓝牙的功能与局限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-使用"><span class="nav-number">3.</span> <span class="nav-text">0x03 - 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Server-端"><span class="nav-number">3.1.</span> <span class="nav-text">Server 端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Peripheral"><span class="nav-number">3.1.1.</span> <span class="nav-text">Peripheral</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Client-端"><span class="nav-number">3.2.</span> <span class="nav-text">Client 端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Central"><span class="nav-number">3.2.1.</span> <span class="nav-text">Central</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据传输"><span class="nav-number">3.3.</span> <span class="nav-text">数据传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后台处理"><span class="nav-number">3.4.</span> <span class="nav-text">后台处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#后台-Central"><span class="nav-number">3.4.1.</span> <span class="nav-text">后台 Central</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后台-Peripheral"><span class="nav-number">3.4.2.</span> <span class="nav-text">后台 Peripheral</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在后台执行长（long-term）任务"><span class="nav-number">3.4.3.</span> <span class="nav-text">在后台执行长（long-term）任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加状态保存和恢复支持"><span class="nav-number">3.4.4.</span> <span class="nav-text">添加状态保存和恢复支持</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">朝元</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

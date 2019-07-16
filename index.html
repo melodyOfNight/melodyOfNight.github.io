@@ -245,6 +245,238 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/蓝牙技术分享/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/12/蓝牙技术分享/" itemprop="url">蓝牙技术分享</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T17:05:07+08:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="0x01-概览"><a href="#0x01-概览" class="headerlink" title="0x01 - 概览"></a>0x01 - 概览</h1><p>蓝牙技术最早是在1994年由爱立信发明的，主要是为了研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。经过十几年的发展，于2010年7月7号推出了蓝牙4.0规范，4.0之前的蓝牙统称为<code>经典蓝牙</code>，4.0之后又加入了<code>低功耗蓝牙</code>，目前最新的版本是蓝牙5.0规范，于2016年6月发布。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/12/蓝牙技术分享/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/01/iOS开发之玩转蓝牙CoreBluetooth/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="朝元">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="朝元的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/01/iOS开发之玩转蓝牙CoreBluetooth/" itemprop="url">iOS开发之玩转蓝牙CoreBluetooth</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-01T17:32:29+08:00">
+                2019-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h2><p>谈到蓝牙，很容易让人联想到蓝牙穿戴设备，好像听起来更靠近硬件层一些。苹果其实对iOS和OSX上的蓝牙已做了一层很好的封装，看过CoreBluetooth Framework的大致API之后，基本上就将其流程明白个大概。难点在于理解其工作模式和理清一些关键概念，比如<code>Peripehral</code>, <code>Central</code>, <code>Service</code>, <code>characteristics</code>等等，不要被这些陌生的单词吓到，网络协议的应用大多脱不了CS的架构模型，这里和大家一起对照传统的Client/Server架构来梳理下iOS和OSX上CoreBluetooth的重要知识点。我画了一张图，方便大家一目了然的明白CoreBluetooth的工作原理。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/01/iOS开发之玩转蓝牙CoreBluetooth/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/27/Core-Bluetooth-Background-Procesing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -595,117 +827,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/work-on-personal-pc-test/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="朝元">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朝元的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/08/work-on-personal-pc-test/" itemprop="url">work on personal pc test</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T14:08:59+08:00">
-                2018-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/26/iOS-插入数据到-TableView-顶部/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -773,8 +894,7 @@
 
       
         
-          
-            <p>困扰了几天的问题终于得到解决了，感谢 github，感谢开源~</p>
+          <p>困扰了几天的问题终于得到解决了，感谢 github，感谢开源~</p>
 <p>在这里记录下遇到的问题，算是记录也避免他人少走一些弯路。</p>
 <p>首先记录下插入数据的流程吧：</p>
 <ol>
@@ -783,37 +903,13 @@
 <li>设置 tableView 的 <code>setContentOffset</code> </li>
 </ol>
 <p>然后再细说一下遇到的问题吧。</p>
-<ul>
-<li>更新数据源之后进行插入崩溃</li>
-</ul>
-<p>崩溃的很莫名其妙，后来查找是插入的<code>indexPaths</code> 的个数和数据源的个数不一致导致的(忘记了一个额外的时间 cell )。这里有一点需要注意的是，插入之后的 DataSource 个数必须等于插入前的加上待插入的个数之和。</p>
-<p>另外，为了避免在插入的过程中有其他的线程也来进行插入。一般都会用 <code>beginUpdates</code> 和 <code>endUpdates</code> 包起来，保证插入完成之后再插其他的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">[self.viewModel.listData addObject:model_time];</span><br><span class="line"> NSIndexPath *indexpath = [NSIndexPath indexPathForRow:MAX(0, self.viewModel.listData.count -1) inSection:0];</span><br><span class="line">[self.tableView insertRowAtIndexPath:indexpath withRowAnimation:UITableViewRowAnimationNone];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br></pre></td></tr></table></figure>
-<p>上面的代码片段，除了 <code>beginUpdates</code> 和 <code>endUpdates</code>之外还有一个<code>setAnimationsEnabled</code> 这个，这个又是刚什么用的呢？这是接下来我要讲的第二个问题。</p>
-<ul>
-<li>插入数据之后刷新 <code>tableView</code> 有上个<code>cell</code> 的残影。</li>
-</ul>
-<p>尽管你已经把插入动画设置为 <code>UITableViewRowAnimationNone</code> 了还是会有。Stack Overflow 查找了一下，发现在插入的时候把<code>UIView</code>的动画去掉就可以了。</p>
-<ul>
-<li>插入多条数据<code>tableView</code>会滚动到顶部。</li>
-</ul>
-<p>对于滚动到顶部这个问题，查找了好多回答，清一色的都是设置 <code>setContentOffset</code> ，问题是尽管我设置了正确的 <code>setContentOffset</code> 还是有问题。一直被这个问题困扰了几天，后来干脆去<code>github</code>上翻看<code>IM</code>相关项目的源码，发现了插入数据的时候有些不同。</p>
-<p>原本我是这样插入数据的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">[self.viewModel.listData insertObjects:models atIndex:0];</span><br><span class="line">NSMutableArray&lt;NSIndexPath*&gt;* indexPaths = [[NSMutableArray alloc] initWithCapacity:models.count];</span><br><span class="line">for (int i = 0; i &lt; models.count; i++) &#123;</span><br><span class="line">       NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];</span><br><span class="line">       [indexPaths addObject:indexPath];</span><br><span class="line">&#125;</span><br><span class="line">[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br></pre></td></tr></table></figure>
-<p>改成这样就可以了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">NSMutableArray&lt;NSIndexPath*&gt;* indexPaths = [[NSMutableArray alloc] initWithCapacity:models.count];</span><br><span class="line">NSMutableIndexSet *indexSets = [[NSMutableIndexSet alloc] init];</span><br><span class="line">[models enumerateObjectsUsingBlock:^(RSChatTaskModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];</span><br><span class="line">[indexPaths addObject:indexPath];</span><br><span class="line">[indexSets addIndex:idx];</span><br><span class="line">    &#125;];</span><br><span class="line">[self.viewModel.listData insertObjects:models atIndexes:indexSets];</span><br><span class="line">[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>计算<code>setContentOffset</code>的方式</li>
-</ul>
-<p>有<code>2</code>种方式：<br>1、在<code>scrollViewDidScroll</code>的时候，在插入之前拿到插入前的<code>tableView</code>的<code>contentOffset</code> ，插入之后(<code>endUpdates</code>的时候会去重新计算<code>tableView:estimatedHeightForRowAtIndexPath</code>)再去拿<code>contentOffset</code>，两者相加即是插入<code>cell</code>的高度</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">插入cells的高度 =  afterContentSize.height - beforeContentSize.height</span><br></pre></td></tr></table></figure>
-<ul>
-<li>另一个就是加载下一页的时机和防止重复加载的问题，这里我设置为还剩下<code>5</code>条数据的时候开始加载下一页，并且是往下拉加载更多的时候才会去加载。</li>
-</ul>
-<p>插入<code>cells</code>到<code>tableview</code>顶部完整代码片段为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;loadMore: 加载下一页数据...&quot;);</span><br><span class="line">CGSize beforeContentSize = self.tableView.contentSize;</span><br><span class="line">CGPoint beforeContentOffset = self.tableView.contentOffset;</span><br><span class="line">[UIView setAnimationsEnabled:NO];</span><br><span class="line">[self.tableView beginUpdates];</span><br><span class="line">NSMutableArray&lt;NSIndexPath*&gt;* indexPaths = [[NSMutableArray alloc] initWithCapacity:models.count];</span><br><span class="line">NSMutableIndexSet *indexSets = [[NSMutableIndexSet alloc] init];</span><br><span class="line">[models enumerateObjectsUsingBlock:^(RSChatTaskModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];</span><br><span class="line">    [indexPaths addObject:indexPath];</span><br><span class="line">    [indexSets addIndex:idx];</span><br><span class="line">&#125;];</span><br><span class="line">[self.viewModel.listData insertObjects:models atIndexes:indexSets];</span><br><span class="line">[self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];</span><br><span class="line">[self.tableView endUpdates];</span><br><span class="line">[UIView setAnimationsEnabled:YES];</span><br><span class="line">    </span><br><span class="line">CGSize afterContentSize = self.tableView.contentSize;</span><br><span class="line">CGPoint afterContentOffset = self.tableView.contentOffset;</span><br><span class="line"></span><br><span class="line">NSArray *subArr = [self.viewModel.listData subarrayWithRange:NSMakeRange(0, models.count)];</span><br><span class="line">float insertCellsH = 0.0;</span><br><span class="line">for (RSChatTaskModel *model in subArr) &#123;</span><br><span class="line">    insertCellsH += [model.height floatValue];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CGPoint newContentOffset = CGPointMake(afterContentOffset.x, beforeContentOffset.y + (afterContentSize.height - beforeContentSize.height));</span><br><span class="line">[self.tableView setContentOffset:newContentOffset animated:NO];</span><br></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/26/iOS-插入数据到-TableView-顶部/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -922,18 +1018,14 @@
 
       
         
-          
-            <p>1.设置假的间距，我们在<code>tableviewcell</code>的<code>contentView</code>上添加一个view，比如让其距离上下左右的距离都是<code>10</code>；这个方法是最容易想到的；</p>
-<p>2.用<code>UICollectionView</code>来代替<code>tableview</code>，然后通过下面这个函数来设置<code>UICollectionViewCell</code>的上下左右的间距；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//协议中的方法，用于返回单元格的大小  </span><br><span class="line">- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath&#123;  </span><br><span class="line">    return CGSizeMake(ScreenWidth-20,150);  </span><br><span class="line">&#125;  </span><br><span class="line">//协议中的方法，用于返回整个CollectionView上、左、下、右距四边的间距  </span><br><span class="line">- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section&#123;  </span><br><span class="line">    //上、左、下、右的边距  </span><br><span class="line">    return UIEdgeInsetsMake(10, 10, 10, 10);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3.用控件<code>tableview</code>，比如有十条数据，那就给<code>tableview</code>分十组，每组只放一条数据，也就是一个<code>cell</code>，然后设置<code>UICollectionViewCell</code>的<code>head view</code>和<code>foot view</code>来设置<code>cell</code>的间距，但是这个方法只能设置上下间距，如果想设置距离屏幕左右的距离，可以设置<code>uitableview</code>距离左右的距离；<code>uitableview</code>的<code>style</code>为<code>UITableViewStyleGrouped</code>；不然<code>headview</code>会浮动；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView&#123;  </span><br><span class="line">    return 10;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section&#123;  </span><br><span class="line">    return 1;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath&#123;  </span><br><span class="line">    return 50;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section&#123;  </span><br><span class="line">    return 10;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section&#123;  </span><br><span class="line">    return 0.00001;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section&#123;  </span><br><span class="line">    UIView *headView = [[UIView alloc]init];  </span><br><span class="line">    headView.backgroundColor = [UIColor redColor];  </span><br><span class="line">    return headView;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;  </span><br><span class="line">    static NSString *TableSampleIdentifier = @&quot;cellStr&quot;;  </span><br><span class="line">    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TableSampleIdentifier];  </span><br><span class="line">    if (cell == nil) &#123;  </span><br><span class="line">        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:TableSampleIdentifier];  </span><br><span class="line">    &#125;  </span><br><span class="line">    return cell;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>4.重新设置的<code>UITableViewCellframe</code>。</p>
-<p>代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;MyViewCell.h&quot;  </span><br><span class="line">  </span><br><span class="line">@implementation MyViewCell  </span><br><span class="line">  </span><br><span class="line">- (void)awakeFromNib &#123;  </span><br><span class="line">    [super awakeFromNib];  </span><br><span class="line">    // Initialization code  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (void)setFrame:(CGRect)frame&#123;  </span><br><span class="line">    frame.origin.x += 10;  </span><br><span class="line">    frame.origin.y += 10;  </span><br><span class="line">    frame.size.height -= 10;  </span><br><span class="line">    frame.size.width -= 20;  </span><br><span class="line">    [super setFrame:frame];  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">- (void)setSelected:(BOOL)selected animated:(BOOL)animated &#123;  </span><br><span class="line">    [super setSelected:selected animated:animated];  </span><br><span class="line">  </span><br><span class="line">    // Configure the view for the selected state  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>参考链接： <a href="https://blog.csdn.net/u014220518/article/details/51995989" target="_blank" rel="noopener">这里</a></p>
-
-          
+          <p>1.设置假的间距，我们在<code>tableviewcell</code>的<code>contentView</code>上添加一个view，比如让其距离上下左右的距离都是<code>10</code>；这个方法是最容易想到的；</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/24/设置UITableViewCell之间的间距-推荐第四种/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1520,122 +1612,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/24/给 Objective-C 中的 Protocol 加上默认的实现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="朝元">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="朝元的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/24/给 Objective-C 中的 Protocol 加上默认的实现/" itemprop="url">给 Objective-C 中的 Protocol 加上默认的实现</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-24T10:09:17+08:00">
-                2017-08-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="0x01-Abstract-Class"><a href="#0x01-Abstract-Class" class="headerlink" title="0x01 Abstract Class"></a>0x01 Abstract Class</h1><p>Java、C++ 等 OOP 语言有一个抽象类的概念，即一个类实现了部分方法，另一部分的方法必须由继承它的子类来实现。Objective-C 在设计上没有这个概念，转而提供了用途类似的 协议，除了不能给方法加默认实现以外，与抽象类的用法大体相同。但是在实际项目中，让一个协议实现一些共通的方法还是很有必要的，比如很多类都遵守了某一个协议，而这个协议中某一个方法的实现大体上都一样的时候，在每一个子类内部都 copy 一份同样的代码就不太合适了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/24/给 Objective-C 中的 Protocol 加上默认的实现/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1685,7 +1661,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
