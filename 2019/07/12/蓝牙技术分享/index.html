@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://yoursite.com/images/bluetooth-EDL.png">
 <meta property="og:image" content="http://yoursite.com/images/bluetooth-L2CAP-EDL.png">
 <meta property="og:image" content="http://yoursite.com/images/bluetooth-throughput.png">
-<meta property="og:updated_time" content="2019-07-16T06:16:33.254Z">
+<meta property="og:updated_time" content="2019-07-16T06:23:00.872Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蓝牙技术分享">
 <meta name="twitter:description" content="0x01 - 概览蓝牙技术最早是在1994年由爱立信发明的，主要是为了研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。经过十几年的发展，于2010年7月7号推出了蓝牙4.0规范，4.0之前的蓝牙统称为经典蓝牙，4.0之后又加入了低功耗蓝牙，目前最新的版本是蓝牙5.0规范，于2016年6月发布。">
@@ -515,7 +515,7 @@
 </ol>
 <p><strong>选择性加入状态保存与恢复</strong></p>
 <p>在初始化 Central 的时候制定存储的key <code>CBCentralManagerOptionRestoreIdentifierKey</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager =</span><br><span class="line">        [[CBCentralManager alloc] initWithDelegate:self queue:nil</span><br><span class="line">         options:@&#123; CBCentralManagerOptionRestoreIdentifierKey:</span><br><span class="line">         @&quot;myCentralManagerIdentifier&quot; &#125;];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@&#123; CBCentralManagerOptionRestoreIdentifierKey: @&quot;myCentralManagerIdentifier&quot; &#125;];</span><br></pre></td></tr></table></figure>
 <p><strong>重新初始化Central或Peripheral管理器对象</strong></p>
 <p>当系统在后台重启程序时，我们所需要做的第一件事就是使用恢复标识来重新初始化这些对象。我们可以通过在程序代理对象的<code>application:didFinishLaunchingWithOptions:</code>方法中，使用合适的启动选项键来访问管理器对象的列表(这个列表是程序关闭是系统为程序保存的)。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions</span><br><span class="line">&#123;</span><br><span class="line">    // Override point for customization after application launch.</span><br><span class="line">    </span><br><span class="line">    NSArray *centralManagerIdentifiers = launchOptions[UIApplicationLaunchOptionsBluetoothCentralsKey];</span><br><span class="line">    </span><br><span class="line">    // TODO: ...</span><br><span class="line">    </span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -544,7 +544,6 @@
 <p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html#//apple_ref/doc/uid/TP40013257-CH3-SW1" target="_blank" rel="noopener">Performing Common Role Central Tasks</a></p>
 <p><a href="https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html#//apple_ref/doc/uid/TP40013257-CH7-SW1" target="_blank" rel="noopener">Core Bluetooth Programming Guide</a></p>
 <p><a href="https://developer.apple.com/videos/play/wwdc2017/712/" target="_blank" rel="noopener">WWDC 2017: What’s New in Core Bluetooth</a></p>
-<p>备注：<br>点对点，一对一<br>广播，一对多<br>网格（Mesh），指的是多对多</p>
 
       
     </div>
