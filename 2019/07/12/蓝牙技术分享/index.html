@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://yoursite.com/images/bluetooth-EDL.png">
 <meta property="og:image" content="http://yoursite.com/images/bluetooth-L2CAP-EDL.png">
 <meta property="og:image" content="http://yoursite.com/images/bluetooth-throughput.png">
-<meta property="og:updated_time" content="2019-08-29T10:48:17.000Z">
+<meta property="og:updated_time" content="2019-08-30T09:36:34.418Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蓝牙技术分享">
 <meta name="twitter:description" content="0x01 - 概览蓝牙技术最初由爱立信创制。技术始于爱立信公司的1994方案，它是研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。发明者希望为设备间的通讯创造一组统一规则（标准化协议），以解决用户间互不兼容的移动电子设备。从早期的1.0到目前最新的5.0版本，中间经过了十几年的发展。我们这里着重关注的是蓝牙4.0以及4.0之后的规范，蓝牙4.0于2010年7月7号推出，4.0之前的">
@@ -320,7 +320,7 @@
       
 
       
-        <h1 id="0x01-概览"><a href="#0x01-概览" class="headerlink" title="0x01 - 概览"></a>0x01 - 概览</h1><p>蓝牙技术最初由爱立信创制。技术始于爱立信公司的1994方案，它是研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。发明者希望为设备间的通讯创造一组统一规则（标准化协议），以解决用户间互不兼容的移动电子设备。从早期的1.0到目前最新的5.0版本，中间经过了十几年的发展。我们这里着重关注的是蓝牙4.0以及4.0之后的规范，蓝牙4.0于2010年7月7号推出，4.0之前的蓝牙统称为<code>经典蓝牙</code>，4.0之后又加入了<code>低功耗功能</code>并且有效的传输距离达到了最大的60米。</p>
+        <h1 id="0x01-概览"><a href="#0x01-概览" class="headerlink" title="0x01 - 概览"></a>0x01 - 概览</h1><p>蓝牙技术最初由爱立信创制。技术始于爱立信公司的1994方案，它是研究在移动电话和其他配件间进行低功耗、低成本无线通信连接的方法。发明者希望为设备间的通讯创造一组统一规则（标准化协议），以解决用户间互不兼容的移动电子设备。从早期的1.0到目前最新的5.0版本，中间经过了十几年的发展。我们这里着重关注的是蓝牙4.0以及4.0之后的规范，蓝牙4.0于2010年7月7号推出，4.0之前的蓝牙统称为<code>经典蓝牙</code>，4.0之后又加入了低功耗功能并且有效的传输距离达到了最大的60米。</p>
 <a id="more"></a>
 <h1 id="0x02-蓝牙的功能与局限"><a href="#0x02-蓝牙的功能与局限" class="headerlink" title="0x02 - 蓝牙的功能与局限"></a>0x02 - 蓝牙的功能与局限</h1><p><strong>1）蓝牙的技术特点</strong></p>
 <ul>
@@ -368,7 +368,10 @@
 <ul>
 <li>传输速率不高</li>
 </ul>
-<p>经典蓝牙是 1~3Mb/s ，低功耗蓝牙是 1Mb/s</p>
+<p>经典蓝牙是 1~3Mb/s ，低功耗蓝牙是 1Mb/s </p>
+<blockquote>
+<p>Note：实际测试并没有达到这么高，iphone 7 plus -&gt; iphone x , 获取到的<code>maximumUpdateValueLength</code>属性值为<code>524 bytes/packet</code>(不同机型值不一样)，超过 524 字节的部分将被丢弃，实测一秒钟可以发80个包，所以 MTU 为 <code>40.9Kb/s</code></p>
+</blockquote>
 <ul>
 <li>数据吞吐量不高</li>
 </ul>
